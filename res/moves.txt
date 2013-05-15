@@ -2,4 +2,9 @@ qld1
 kde8
 d8 h4
 c4 d6*
+k2 a10*
+ej 23 a
+  bde3
+a1 b2 c3
+d2* a5
 e1 g1 h1 f1

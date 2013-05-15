@@ -17,7 +17,7 @@ public class Driver
 	{
 		try
 		{
-			ChessParser parser = new ChessParser( PATH );
+			ChessParser parser = new ChessParser( (args.length == 1) ? args[0] : PATH );
 			while ( parser.isReady() )
 			{
 				System.out.println( parser.parseNextLine() );
