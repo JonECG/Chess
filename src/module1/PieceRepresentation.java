@@ -15,6 +15,7 @@ public enum PieceRepresentation
 		this.representation = representation;
 	}
 	
+	//Returns the enum value that is represented by a character
 	public static PieceRepresentation parseCharacter( char representation )
 	{
 		PieceRepresentation result = null;

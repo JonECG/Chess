@@ -1,5 +1,10 @@
 qld1
 kde8
+rle5
+bdd7
+nlc8
+pdb2
+xdb7
 d8 h4
 c4 d6*
 k2 a10*
@@ -7,4 +12,7 @@ ej 23 a
   bde3
 a1 b2 c3
 d2* a5
+a5 G2
 e1 g1 h1 f1
+ifjels
+e1 e2 e3

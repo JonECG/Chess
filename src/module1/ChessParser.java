@@ -28,22 +28,24 @@ public class ChessParser
 	private static final int SECOND_MOVE_FROM_GROUP = 3;
 	private static final int SECOND_MOVE_TO_GROUP = 4;
 	
-	
 	private BufferedReader reader;
 	
+	//Create the reader
 	public ChessParser( String path ) throws FileNotFoundException
 	{
 		reader = new BufferedReader( new FileReader( new File( path ) ) );
 	}
 	
+	//Intefaces to the underlying ready to check if it is ready to be read from
 	public boolean isReady() throws IOException
 	{
 		return reader.ready();
 	}
 	
+	//Reads the next line of the file and return a string representing what operation the line contained
 	public String parseNextLine() throws IOException
 	{
-		String currentLine = reader.readLine().trim();
+		String currentLine = reader.readLine().trim().toLowerCase();
 		String result;
 		
 		if ( currentLine.matches( REGEX_PLACE_PIECE ) )
