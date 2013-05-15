@@ -1,0 +1,11 @@
+//Place a piece
+[kqbrnp][ld][a-h][1-8]
+
+//Move piece from one place to another with capture
+[a-h][1-8] [a-h][1-8]\*
+
+//Move piece from one place to another without capture
+[a-h][1-8] [a-h][1-8]
+
+//Move two Pieces in same move
+[a-h][1-8](?: [a-h][1-8]){3}
