@@ -32,8 +32,3 @@ ple2
 plf2
 plg2
 plh2
---TEST MOVEMENT
-a2 a4-
-a4 a6-
-a1 a3-
-a3 b3-
