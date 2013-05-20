@@ -60,7 +60,7 @@ public class Cell
 	{
 		boolean moveWasMade = false;
 		
-		if( evaluateSpecialCases( potentialMove ) )
+		if( evaluateSpecialCases( referenceMove ) )
 		{
 			if ( referenceMove.getStyle() != MoveStyle.SLIDE || isSlideUnblocked( potentialMove, referenceMove ) )
 			{
