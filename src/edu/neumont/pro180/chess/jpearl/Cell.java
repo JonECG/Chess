@@ -103,7 +103,7 @@ public class Cell
 		}
 		else
 		{
-			System.out.println( "<<ILLEGAL MOVE -- MOVE'S SPECIAL CASE WAS NOT SATISFIED>>" );
+			System.out.println( "<<POTENTIAL ILLEGAL MOVE -- POSSIBLE MOVE'S SPECIAL CASE WAS NOT SATISFIED>>" );
 		}
 		
 		return moveWasMade;

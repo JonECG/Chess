@@ -54,23 +54,34 @@ public class ChessParser
 		return reader.ready();
 	}
 	
+	//Parses next command from a file
 	public void parseNextLine( ChessBoard board ) throws IOException
 	{
 		parse( reader.readLine(), board );
 	}
 	
+	//Parses next command from input
 	public void parseFromInput( ChessBoard board )
 	{
 		Scanner scan = new Scanner( System.in );
-		while( true )
+		boolean gettingUserInput = true;
+		while( gettingUserInput )
 		{
-			System.out.println( "Enter command");
-			parse( scan.nextLine(), board );
-			System.out.println( board );
+			System.out.println( "Enter command or EXIT: " );
+			String nextLine = scan.nextLine();
+			if ( nextLine.toUpperCase().equals( "EXIT" ) )
+			{
+				gettingUserInput = false;
+			}
+			else
+			{
+				parse( nextLine, board );
+			}
 		}
-		//scan.close();
+		scan.close();
 	}
 	
+	//Runs a command through regex to find out how to use it and tell the cell it affects what it needs to do
 	private void parse( String command, ChessBoard board )
 	{
 		String currentLine = command.trim().toLowerCase();
@@ -84,8 +95,7 @@ public class ChessParser
 			PieceRepresentation pieceRep = PieceRepresentation.parseCharacter( match.group(NEW_PIECE_DESCRIPTION_GROUP).charAt( 0 ) );
 			Location location = Location.parseFromCoordinates( match.group(NEW_PIECE_POSITION_GROUP) );
 			Piece piece = pieceRep.createPiece( color );
-			System.out.println( currentLine );
-			System.out.println( String.format( "Color: %s Representation: %s Location: %s Piece: %s", color, pieceRep, location, piece ) );
+			System.out.println( String.format( "%s represents a placement of a new %s %s at %s.", currentLine, color, pieceRep, location ) );
 			board.getCell( location ).givePiece( piece );
 		}
 		else
@@ -98,9 +108,10 @@ public class ChessParser
 			Location locationTo = Location.parseFromCoordinates( match.group(FIRST_MOVE_TO_GROUP) );
 			Move inferredMove = Move.makeFromLocations( locationFrom, locationTo, MoveType.CAPTURE );
 			Cell movingPieceCell = board.getCell( locationFrom );
-			movingPieceCell.suggestMove( inferredMove );
 			System.out.println( String.format( "%s represents a movement of a piece at %s to %s with a capture.", currentLine,
 					match.group(FIRST_MOVE_FROM_GROUP), match.group(FIRST_MOVE_TO_GROUP) ) );
+			movingPieceCell.suggestMove( inferredMove );
+			System.out.println( board );
 		}
 		else
 		if ( currentLine.matches( REGEX_MOVE_WITHOUT_CAPTURE ) )
@@ -112,9 +123,12 @@ public class ChessParser
 			Location locationTo = Location.parseFromCoordinates( match.group(FIRST_MOVE_TO_GROUP) );
 			Move inferredMove = Move.makeFromLocations( locationFrom, locationTo, MoveType.MOVE );
 			Cell movingPieceCell = board.getCell( locationFrom );
-			movingPieceCell.suggestMove( inferredMove );
 			System.out.println( String.format( "%s represents a movement of a piece at %s to %s.", currentLine,
 					match.group(FIRST_MOVE_FROM_GROUP), match.group(FIRST_MOVE_TO_GROUP) ) );
+			System.out.println();
+			movingPieceCell.suggestMove( inferredMove );
+			System.out.println();
+			System.out.println( board );
 		}
 //		else
 //		if ( currentLine.matches( REGEX_MOVE_TWO_PIECES ) )
@@ -128,59 +142,8 @@ public class ChessParser
 //		}
 		else
 		{
-			//result = String.format( "%s is an invalid command", currentLine );
+			System.out.println( String.format( "%s is an invalid command", currentLine ) );
 		}
-		//return result;
-	}
-	
-	//Reads the next line of the file and return a string representing what operation the line contained
-	public String parseNextLineToString() throws IOException
-	{
-		String currentLine = reader.readLine().trim().toLowerCase();
-		String result;
 		
-		if ( currentLine.matches( REGEX_PLACE_PIECE ) )
-		{
-			Pattern pattern = Pattern.compile( REGEX_PLACE_PIECE );
-			Matcher match = pattern.matcher( currentLine );
-			match.find();
-			result = String.format( "%s represents a placement of a new %s %s at %s.", currentLine, 
-					PieceColor.parseCharacter( match.group(NEW_PIECE_DESCRIPTION_GROUP).charAt( 1 ) ),
-					PieceRepresentation.parseCharacter( match.group(NEW_PIECE_DESCRIPTION_GROUP).charAt( 0 ) ), 
-					match.group(NEW_PIECE_POSITION_GROUP) );
-		}
-		else
-		if ( currentLine.matches( REGEX_MOVE_WITH_CAPTURE ) )
-		{
-			Pattern pattern = Pattern.compile( REGEX_MOVE_WITH_CAPTURE );
-			Matcher match = pattern.matcher( currentLine );
-			match.find();
-			result = String.format( "%s represents a movement of a piece at %s to %s with a capture.", currentLine,
-					match.group(FIRST_MOVE_FROM_GROUP), match.group(FIRST_MOVE_TO_GROUP) );
-		}
-		else
-		if ( currentLine.matches( REGEX_MOVE_WITHOUT_CAPTURE ) )
-		{
-			Pattern pattern = Pattern.compile( REGEX_MOVE_WITHOUT_CAPTURE );
-			Matcher match = pattern.matcher( currentLine );
-			match.find();
-			result = String.format( "%s represents a movement of a piece at %s to %s.", currentLine,
-					match.group(FIRST_MOVE_FROM_GROUP), match.group(FIRST_MOVE_TO_GROUP) );
-		}
-		else
-		if ( currentLine.matches( REGEX_MOVE_TWO_PIECES ) )
-		{
-			Pattern pattern = Pattern.compile( REGEX_MOVE_TWO_PIECES );
-			Matcher match = pattern.matcher( currentLine );
-			match.find();
-			result = String.format( "%s represents a movement of a piece at %s to %s and a piece at %s to %s together.", currentLine,
-					match.group(FIRST_MOVE_FROM_GROUP), match.group(FIRST_MOVE_TO_GROUP),
-					match.group(SECOND_MOVE_FROM_GROUP), match.group(SECOND_MOVE_TO_GROUP) );
-		}
-		else
-		{
-			result = String.format( "%s is an invalid command", currentLine );
-		}
-		return result;
 	}
 }

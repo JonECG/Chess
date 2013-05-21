@@ -37,7 +37,6 @@ public abstract class Piece
 	public void move()
 	{
 		hasMovedBefore = true;
-		System.out.println( "MOVE!" );
 	}
 	
 	public String toString()

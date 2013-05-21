@@ -9,6 +9,7 @@ public class Location
 	private static final int CHARACTER_LOWERCASE_A_REFERENCE = (int) 'a';
 	private int x, y;
 	
+	//Creates a location which represents a coordinate
 	public Location( int x, int y )
 	{
 		this.x = x;
@@ -42,6 +43,7 @@ public class Location
 		return true;
 	}
 	
+	//Return a new location where a move has been added to the current location
 	public Location addMove( Move move )
 	{
 		return new Location( x + move.getDeltaX(), y + move.getDeltaY() );
@@ -57,6 +59,7 @@ public class Location
 		return y;
 	}
 
+	//Parse a location from chessboard coordinates
 	public static Location parseFromCoordinates( String coordinates )
 	{
 		String lowerCaseCoordinates = coordinates.toLowerCase();
@@ -66,6 +69,7 @@ public class Location
 		return new Location( x, y );
 	}
 	
+	//Displays the location as chessboard coordinates
 	@Override
 	public String toString()
 	{

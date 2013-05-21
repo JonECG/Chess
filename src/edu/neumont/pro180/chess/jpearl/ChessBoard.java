@@ -12,6 +12,7 @@ public class ChessBoard
 	private HashMap<Location,Cell> board;
 	private static final int BOARD_SIZE = 8;
 	
+	//Create the board and initiate the cells inside it
 	public ChessBoard()
 	{
 		board = new HashMap<Location,Cell>();
@@ -26,14 +27,13 @@ public class ChessBoard
 		}
 	}
 	
+	//Query the board for a cell at a location
 	public Cell getCell( Location location )
 	{
 		return board.get( location );
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+	//Create a textual representation of the board
 	public String toString()
 	{
 		String result = "";

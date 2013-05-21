@@ -39,6 +39,7 @@ public class Move
 		this.cases = Arrays.asList( cases );
 	}
 	
+	//Rotates moves 90 degrees 3 times to make them point in all direction
 	public static Move[] reflectMoves( Move... moves )
 	{
 		Move[] result = new Move[ moves.length * NUMBER_OF_REFLECTIONS ];
@@ -56,6 +57,7 @@ public class Move
 		return result;
 	}
 	
+	//Find the move that would result in a movement from one location to another
 	public static Move makeFromLocations( Location from, Location to, MoveType type )
 	{
 		return new Move( to.getX()-from.getX(), to.getY()-from.getY(), type, MoveStyle.STEP );
@@ -73,7 +75,7 @@ public class Move
 		return result;
 	}
 
-
+	//Allows moves that are acceptable with each other to be equal. E.G. steps match slide when they are inside and capture matches move_and_capture
 	@Override
 	public boolean equals( Object obj )
 	{
@@ -125,6 +127,7 @@ public class Move
 		return style;
 	}
 
+	//Figures out if a moving step resolves a slide condition move
 	public static boolean isStepInSlide( Move stepMove, Move slideMove )
 	{
 		boolean result = false;

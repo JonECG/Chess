@@ -31,7 +31,7 @@ public class Driver
 			e.printStackTrace();
 		}
 		
-		System.out.println( board );
+		System.out.println( "Good Bye!" );
 	}
 
 }
