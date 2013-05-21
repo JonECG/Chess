@@ -23,6 +23,7 @@ public class Driver
 		{
 			ChessParser parser = new ChessParser( path );
 			parser.parseToBoard( board );
+			System.out.println();
 			System.out.println( board );
 			parser.parseFromInput( board );
 		}

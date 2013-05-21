@@ -24,6 +24,7 @@ public class Cell
 		this.board = board;
 	}
 	
+	//Gives the cell a move for it to check against, if it has a piece, its piece's moveset
 	public void suggestMove( Move suggestion )
 	{
 		if ( piece != null )
@@ -56,6 +57,7 @@ public class Cell
 		}
 	}
 	
+	//Figures out if a move coincides with the board environment as defined by the given reference move. Returns if a move was made
 	private boolean considerMove( Move potentialMove, Move referenceMove, Cell toCell )
 	{
 		boolean moveWasMade = false;
@@ -109,6 +111,7 @@ public class Cell
 		return moveWasMade;
 	}
 	
+	//Returns whether all of the special cases of a move are currently satisfied
 	private boolean evaluateSpecialCases( Move evaluating )
 	{
 		boolean result = true;
@@ -134,6 +137,7 @@ public class Cell
 		return result;
 	}
 	
+	//Returns whether a slide movement path (eg: queen, bishop, rook) is unblocked by other pieces
 	private boolean isSlideUnblocked( Move destination, Move slideReference )
 	{
 		boolean result = true;
