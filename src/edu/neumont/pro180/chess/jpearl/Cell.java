@@ -24,7 +24,7 @@ public class Cell
 		this.board = board;
 	}
 	
-	//Gives the cell a move for it to check against, if it has a piece, its piece's moveset
+	//Gives the cell a move for it to check against, if it has a piece, its piece's moveset.
 	public void suggestMove( Move suggestion )
 	{
 		if ( piece != null )
