@@ -29,26 +29,33 @@ public class Cell
 	{
 		if ( piece != null )
 		{
-			MoveSet potentialMoves = piece.getMoves();
-			ArrayList<Move> applicableMoves = potentialMoves.matchMoves( suggestion, piece.getDirection() );
-			//if (potentialMoves.containsMove( suggestion, piece.getDirection() ))
-			if (applicableMoves.size() > 0)
+			if( piece.getColor() == board.getGame().getTurnColor() )
 			{
-				Location adjustedLocation = location.addMove( suggestion );
-				Cell adjustedCell = board.getCell( adjustedLocation );
-				
-				boolean moveFound = false;
-				for( Move move : applicableMoves )
+				MoveSet potentialMoves = piece.getMoves();
+				ArrayList<Move> applicableMoves = potentialMoves.matchMoves( suggestion, piece.getDirection() );
+				//if (potentialMoves.containsMove( suggestion, piece.getDirection() ))
+				if (applicableMoves.size() > 0)
 				{
-					if( !moveFound )
+					Location adjustedLocation = location.addMove( suggestion );
+					Cell adjustedCell = board.getCell( adjustedLocation );
+					
+					boolean moveFound = false;
+					for( Move move : applicableMoves )
 					{
-						moveFound = considerMove( suggestion, move, adjustedCell );
+						if( !moveFound )
+						{
+							moveFound = considerMove( suggestion, move, adjustedCell );
+						}
 					}
+				}
+				else
+				{
+					System.out.println( "<<ILLEGAL MOVE -- NOT IN MOVESET FOR PIECE>>" );
 				}
 			}
 			else
 			{
-				System.out.println( "<<ILLEGAL MOVE -- NOT IN MOVESET FOR PIECE>>" );
+				System.out.println( "<<ILLEGAL MOVE -- NOT " + piece.getColor() + "'S TURN>>" );
 			}
 		}
 		else
@@ -62,7 +69,7 @@ public class Cell
 	{
 		boolean moveWasMade = false;
 		
-		if( evaluateSpecialCases( referenceMove ) )
+		if( evaluateSpecialCases( potentialMove, referenceMove ) )
 		{
 			if ( referenceMove.getStyle() != MoveStyle.SLIDE || isSlideUnblocked( potentialMove, referenceMove ) )
 			{
@@ -108,11 +115,16 @@ public class Cell
 			System.out.println( "<<POTENTIAL ILLEGAL MOVE -- POSSIBLE MOVE'S SPECIAL CASE WAS NOT SATISFIED>>" );
 		}
 		
+		if (moveWasMade)
+		{
+			board.getGame().giveNextPlayerControl();
+		}
+		
 		return moveWasMade;
 	}
 	
 	//Returns whether all of the special cases of a move are currently satisfied
-	private boolean evaluateSpecialCases( Move evaluating )
+	private boolean evaluateSpecialCases( Move attempt, Move evaluating )
 	{
 		boolean result = true;
 		
@@ -132,6 +144,22 @@ public class Cell
 		{
 			//NOT IMPLEMENTED YET
 			result = false;
+		}
+		if (evaluating.hasCase( MoveCase.MID_POINT_FREE ) )
+		{
+			if(attempt.getDeltaX() % 2 == 0 && attempt.getDeltaY() % 2 == 0 )
+			{
+				//Get the cell that is between the current location and the potential destination
+				Cell testCell = board.getCell( location.addMove( new Move( attempt.getDeltaX() / 2, attempt.getDeltaY() / 2, null, null ) ) );
+				if (testCell.getPiece() != null)
+				{
+					result = false;
+				}
+			}
+			else
+			{
+				result = false;
+			}
 		}
 		
 		return result;

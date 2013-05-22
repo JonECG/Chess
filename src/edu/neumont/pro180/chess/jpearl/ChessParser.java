@@ -4,19 +4,13 @@
  */
 package edu.neumont.pro180.chess.jpearl;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import edu.neumont.pro180.chess.jpearl.Move.MoveType;
 
 
-public class ChessParser
+public abstract class ChessParser
 {
 	//Represents the regex operations
 	private static final String REGEX_PLACE_PIECE = "([kqbrnp][ld])([a-h][1-8])";
@@ -32,54 +26,21 @@ public class ChessParser
 	private static final int SECOND_MOVE_FROM_GROUP = 3;
 	private static final int SECOND_MOVE_TO_GROUP = 4;
 	
-	private BufferedReader reader;
-	
-	//Create the reader
-	public ChessParser( String path ) throws FileNotFoundException
-	{
-		reader = new BufferedReader( new FileReader( new File( path ) ) );
-	}
-	
-	public void parseToBoard( ChessBoard board ) throws IOException
+
+	//Starts running the parser to the board
+	public void parseToBoard( ChessBoard board )
 	{
 		while ( isReady() )
 		{
-			parseNextLine( board );
+			parse( nextLine(), board );
 		}
 	}
 	
 	//Intefaces to the underlying ready to check if it is ready to be read from
-	public boolean isReady() throws IOException
-	{
-		return reader.ready();
-	}
+	public abstract boolean isReady();
 	
-	//Parses next command from a file
-	public void parseNextLine( ChessBoard board ) throws IOException
-	{
-		parse( reader.readLine(), board );
-	}
-	
-	//Parses next command from input
-	public void parseFromInput( ChessBoard board )
-	{
-		Scanner scan = new Scanner( System.in );
-		boolean gettingUserInput = true;
-		while( gettingUserInput )
-		{
-			System.out.println( "Enter command or EXIT: " );
-			String nextLine = scan.nextLine();
-			if ( nextLine.toUpperCase().equals( "EXIT" ) )
-			{
-				gettingUserInput = false;
-			}
-			else
-			{
-				parse( nextLine, board );
-			}
-		}
-		scan.close();
-	}
+	//Queries for the next line to parse
+	public abstract String nextLine();
 	
 	//Runs a command through regex to find out how to use it and tell the cell it affects what it needs to do
 	private void parse( String command, ChessBoard board )
@@ -111,7 +72,7 @@ public class ChessParser
 			System.out.println( String.format( "%s represents a movement of a piece at %s to %s with a capture.", currentLine,
 					match.group(FIRST_MOVE_FROM_GROUP), match.group(FIRST_MOVE_TO_GROUP) ) );
 			movingPieceCell.suggestMove( inferredMove );
-			System.out.println( board );
+			System.out.println( board.getGame() );
 		}
 		else
 		if ( currentLine.matches( REGEX_MOVE_WITHOUT_CAPTURE ) )
@@ -128,7 +89,7 @@ public class ChessParser
 			System.out.println();
 			movingPieceCell.suggestMove( inferredMove );
 			System.out.println();
-			System.out.println( board );
+			System.out.println( board.getGame() );
 		}
 //		else
 //		if ( currentLine.matches( REGEX_MOVE_TWO_PIECES ) )

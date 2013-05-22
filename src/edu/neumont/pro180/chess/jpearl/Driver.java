@@ -4,8 +4,6 @@
  */
 package edu.neumont.pro180.chess.jpearl;
 
-import java.io.IOException;
-
 public class Driver
 {
 	private static final String PATH = "res\\log.txt";
@@ -17,20 +15,18 @@ public class Driver
 	{
 		String path = (args.length == 1) ? args[0] : PATH;
 		
-		ChessBoard board = new ChessBoard();
+		ChessGame game = new ChessGame(
+				new Player( PieceColor.LIGHT ),
+				new Player( PieceColor.DARK)
+				);
 		
-		try
-		{
-			ChessParser parser = new ChessParser( path );
-			parser.parseToBoard( board );
-			System.out.println();
-			System.out.println( board );
-			parser.parseFromInput( board );
-		}
-		catch ( IOException e )
-		{
-			e.printStackTrace();
-		}
+		game.runParser( new ChessFileParser( path ) );
+		
+		System.out.println( "\n" + game );
+		
+		game.runParser( new ChessInputParser() );
+		
+		System.out.println( game );
 		
 		System.out.println( "Good Bye!" );
 	}

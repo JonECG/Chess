@@ -11,9 +11,10 @@ public class ChessBoard
 {
 	private HashMap<Location,Cell> board;
 	private static final int BOARD_SIZE = 8;
+	private ChessGame game;
 	
 	//Create the board and initiate the cells inside it
-	public ChessBoard()
+	public ChessBoard(ChessGame game)
 	{
 		board = new HashMap<Location,Cell>();
 		for( int i = 0; i < BOARD_SIZE; i++ )
@@ -22,9 +23,10 @@ public class ChessBoard
 			{
 				Cell cell = new Cell( i, j, this );
 				board.put( cell.getLocation(), cell );
-
 			}
 		}
+		
+		this.game = game;
 	}
 	
 	//Query the board for a cell at a location
@@ -48,5 +50,10 @@ public class ChessBoard
 			result += "\n";
 		}
 		return result;
+	}
+	
+	public ChessGame getGame()
+	{
+		return game;
 	}
 }
