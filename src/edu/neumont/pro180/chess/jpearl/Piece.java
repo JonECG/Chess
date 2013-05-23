@@ -15,7 +15,7 @@ public abstract class Piece
 		this.color = color;
 	}
 	
-	public abstract MoveSet getMoves();
+	public abstract MoveSet getMoveSet();
 	
 	public abstract char getCharacterRepresentation();
 	

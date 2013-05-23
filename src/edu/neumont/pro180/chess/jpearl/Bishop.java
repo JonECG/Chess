@@ -21,7 +21,7 @@ public class Bishop extends Piece
 	}
 
 	@Override
-	public MoveSet getMoves()
+	public MoveSet getMoveSet()
 	{
 		Move[] baseMoves = { new Move( 1, 1, MoveType.MOVE_AND_CAPTURE, MoveStyle.SLIDE ) };
 		return new MoveSet( Move.reflectMoves( baseMoves ) );

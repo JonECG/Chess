@@ -31,7 +31,7 @@ public class Cell
 		{
 			if( piece.getColor() == board.getGame().getTurnColor() )
 			{
-				MoveSet potentialMoves = piece.getMoves();
+				MoveSet potentialMoves = piece.getMoveSet();
 				ArrayList<Move> applicableMoves = potentialMoves.matchMoves( suggestion, piece.getDirection() );
 				//if (potentialMoves.containsMove( suggestion, piece.getDirection() ))
 				if (applicableMoves.size() > 0)
@@ -123,6 +123,60 @@ public class Cell
 		return moveWasMade;
 	}
 	
+	private boolean isMoveValid( Move potentialMove, Move referenceMove )
+	{
+		boolean result = false;
+		
+		Location adjustedLocation = location.addMove( potentialMove );
+		Cell toCell = board.getCell( adjustedLocation );
+		
+		if( evaluateSpecialCases( potentialMove, referenceMove ) )
+		{
+			if ( referenceMove.getStyle() != MoveStyle.SLIDE || isSlideUnblocked( potentialMove, referenceMove ) )
+			{
+				if( potentialMove.getType() == MoveType.CAPTURE )
+				{
+					if (toCell.hasPiece())
+					{
+						if (toCell.getPiece().getColor() != piece.getColor())
+						{
+							result = true;
+						}
+						else
+						{
+							System.out.println( "<<ILLEGAL CAPTURE -- OTHER PIECE BELONGS TO CAPTURING PLAYER>>" );
+						}
+					}
+					else
+					{
+						System.out.println( "<<ILLEGAL CAPTURE -- NO PIECE TO CAPTURE>>" );
+					}
+				}
+				else if( potentialMove.getType() == MoveType.MOVE )
+				{
+					if (!toCell.hasPiece())
+					{
+						result = true;
+					}
+					else
+					{
+						System.out.println( "<<ILLEGAL MOVE -- NEW LOCATION IS OCCUPIED>>" );
+					}
+				}
+			}
+			else
+			{
+				System.out.println( "<<ILLEGAL MOVE -- SLIDE MOVEMENT IS BLOCKED>>" );
+			}
+		}
+		else
+		{
+			System.out.println( "<<POTENTIAL ILLEGAL MOVE -- POSSIBLE MOVE'S SPECIAL CASE WAS NOT SATISFIED>>" );
+		}
+		
+		return result;
+	}
+	
 	//Returns whether all of the special cases of a move are currently satisfied
 	private boolean evaluateSpecialCases( Move attempt, Move evaluating )
 	{
@@ -190,6 +244,46 @@ public class Cell
 				simulate = simulate.addMove( slideReference );
 				result = ( !board.getCell( simulate ).hasPiece() );
 			}
+		}
+		
+		return result;
+	}
+	
+	public ArrayList<Move> getPossibleMoves()
+	{
+		ArrayList<Move> result = new ArrayList<Move>();
+		
+		if (piece != null)
+		{
+			Move[] moves = piece.getMoveSet().getMoves();
+			
+			for( Move move : moves )
+			{
+				if (move.getStyle() == MoveStyle.STEP )
+				{
+					if( isMoveValid( move, move ) )
+						result.add( move );
+				}
+				else
+				{
+					Location relative = location;
+					boolean solvingNext = true;
+					do
+					{
+						relative = relative.addMove( move );
+						Move nextMove = Move.makeFromLocations( location, relative, move.getType() );
+						
+						if (relative.isInBoard() && isMoveValid(nextMove, move))
+						{
+							result.add( nextMove );
+						}
+						else
+							solvingNext = false;
+					}
+					while(solvingNext);
+				}
+			}
+			
 		}
 		
 		return result;

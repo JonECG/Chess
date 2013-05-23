@@ -5,6 +5,7 @@
 package edu.neumont.pro180.chess.jpearl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class MoveSet
 {
@@ -30,5 +31,11 @@ public class MoveSet
 		}
 		
 		return result;
+	}
+
+
+	public Move[] getMoves()
+	{
+		return moves;
 	}
 }

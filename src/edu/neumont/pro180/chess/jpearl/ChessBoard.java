@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class ChessBoard
 {
 	private HashMap<Location,Cell> board;
-	private static final int BOARD_SIZE = 8;
+	public static final int BOARD_SIZE = 8;
 	private ChessGame game;
 	
 	//Create the board and initiate the cells inside it

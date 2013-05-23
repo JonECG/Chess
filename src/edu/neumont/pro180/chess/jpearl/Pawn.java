@@ -22,7 +22,7 @@ public class Pawn extends Piece
 	}
 	
 	@Override
-	public MoveSet getMoves()
+	public MoveSet getMoveSet()
 	{
 		Move[] baseMoves = { new Move( 0, 1, MoveType.MOVE, MoveStyle.STEP ),
 				new Move( 1, 1, MoveType.CAPTURE, MoveStyle.STEP ),

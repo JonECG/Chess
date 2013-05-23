@@ -21,7 +21,7 @@ public class Knight extends Piece
 	}
 	
 	@Override
-	public MoveSet getMoves()
+	public MoveSet getMoveSet()
 	{
 		Move[] baseMoves = { new Move( 2, 1, MoveType.MOVE_AND_CAPTURE, MoveStyle.STEP ), new Move( 1, 2, MoveType.MOVE_AND_CAPTURE, MoveStyle.STEP ) };
 		return new MoveSet( Move.reflectMoves( baseMoves ) );
