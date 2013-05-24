@@ -17,6 +17,30 @@ public abstract class Piece
 	
 	public abstract MoveSet getMoveSet();
 	
+	public MoveSet getMoveSetByColor()
+	{
+		MoveSet moveSet = getMoveSet();
+		MoveSet result;
+		if (color.getVerticalDirection().getDeltaY() == -1)
+		{
+			Move[] reference = moveSet.getMoves();
+			Move[] newMoves = new Move[reference.length];
+			
+			for( int i = 0; i < reference.length; i++ )
+			{
+				newMoves[i] = reference[i].getVerticallyFlipped();
+			}
+			
+			result = new MoveSet( newMoves );
+		}
+		else
+		{
+			result = moveSet;
+		}
+		
+		return result;	
+	}
+	
 	public abstract char getCharacterRepresentation();
 	
 	public PieceColor getColor()

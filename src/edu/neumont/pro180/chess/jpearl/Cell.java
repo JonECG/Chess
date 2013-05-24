@@ -142,14 +142,6 @@ public class Cell
 						{
 							result = true;
 						}
-						else
-						{
-							System.out.println( "<<ILLEGAL CAPTURE -- OTHER PIECE BELONGS TO CAPTURING PLAYER>>" );
-						}
-					}
-					else
-					{
-						System.out.println( "<<ILLEGAL CAPTURE -- NO PIECE TO CAPTURE>>" );
 					}
 				}
 				else if( potentialMove.getType() == MoveType.MOVE )
@@ -158,20 +150,8 @@ public class Cell
 					{
 						result = true;
 					}
-					else
-					{
-						System.out.println( "<<ILLEGAL MOVE -- NEW LOCATION IS OCCUPIED>>" );
-					}
 				}
 			}
-			else
-			{
-				System.out.println( "<<ILLEGAL MOVE -- SLIDE MOVEMENT IS BLOCKED>>" );
-			}
-		}
-		else
-		{
-			System.out.println( "<<POTENTIAL ILLEGAL MOVE -- POSSIBLE MOVE'S SPECIAL CASE WAS NOT SATISFIED>>" );
 		}
 		
 		return result;
@@ -242,7 +222,7 @@ public class Cell
 			if (result)
 			{
 				simulate = simulate.addMove( slideReference );
-				result = ( !board.getCell( simulate ).hasPiece() );
+				result = ( simulate.isInBoard() && !board.getCell( simulate ).hasPiece() );
 			}
 		}
 		
@@ -255,32 +235,32 @@ public class Cell
 		
 		if (piece != null)
 		{
-			Move[] moves = piece.getMoveSet().getMoves();
+			Move[] moves = piece.getMoveSetByColor().getExpandedTypeMoves();
 			
 			for( Move move : moves )
 			{
+				Location relative = location;
 				if (move.getStyle() == MoveStyle.STEP )
 				{
-					if( isMoveValid( move, move ) )
+					relative = relative.addMove( move );
+					if(relative.isInBoard() &&  isMoveValid( move, move ) )
 						result.add( move );
 				}
 				else
 				{
-					Location relative = location;
-					boolean solvingNext = true;
+					relative = relative.addMove( move );
+					Move nextMove = Move.makeFromLocations( location, relative, move.getType() );
 					do
 					{
-						relative = relative.addMove( move );
-						Move nextMove = Move.makeFromLocations( location, relative, move.getType() );
-						
 						if (relative.isInBoard() && isMoveValid(nextMove, move))
 						{
 							result.add( nextMove );
 						}
-						else
-							solvingNext = false;
+
+						relative = relative.addMove( move );
+						nextMove = Move.makeFromLocations( location, relative, move.getType() );
 					}
-					while(solvingNext);
+					while(isSlideUnblocked(nextMove,move));
 				}
 			}
 			

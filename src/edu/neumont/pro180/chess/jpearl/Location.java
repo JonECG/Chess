@@ -67,11 +67,24 @@ public class Location
 	//Parse a location from chessboard coordinates
 	public static Location parseFromCoordinates( String coordinates )
 	{
+		if (coordinates.length() != 2)
+		{
+			throw new IllegalArgumentException( coordinates + " is improper length." );
+		}
+		
 		String lowerCaseCoordinates = coordinates.toLowerCase();
 		
 		int x = lowerCaseCoordinates.charAt( 0 ) - CHARACTER_LOWERCASE_A_REFERENCE;
 		int y = Integer.parseInt( String.valueOf( lowerCaseCoordinates.charAt( 1 ) ) ) - 1;
-		return new Location( x, y );
+		
+		Location location = new Location( x, y );
+		
+		if (!location.isInBoard())
+		{
+			throw new IllegalArgumentException( coordinates + " falls outside the board." );
+		}
+		
+		return location;
 	}
 	
 	//Displays the location as chessboard coordinates

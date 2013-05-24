@@ -24,7 +24,9 @@ public class Driver
 		
 		System.out.println( "\n" + game );
 		
-		game.runParser( new ChessInputParser() );
+		game.passToUser();
+		
+		//game.runParser( new ChessInputParser() );
 		
 		System.out.println( game );
 		

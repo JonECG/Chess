@@ -128,6 +128,11 @@ public class Move
 		return style;
 	}
 
+	public MoveCase[] getCases()
+	{
+		return (MoveCase[]) cases.toArray();
+	}
+	
 	//Figures out if a moving step resolves a slide condition move
 	public static boolean isStepInSlide( Move stepMove, Move slideMove )
 	{
@@ -177,5 +182,11 @@ public class Move
 	public boolean hasCase( MoveCase testCase )
 	{
 		return cases.contains( testCase );
+	}
+
+
+	public Move getVerticallyFlipped()
+	{
+		return new Move( deltaX, -deltaY, type, style, getCases() ); 
 	}
 }
