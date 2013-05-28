@@ -5,7 +5,6 @@
 package edu.neumont.pro180.chess.jpearl;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import edu.neumont.pro180.chess.jpearl.Move.MoveType;
 
@@ -41,6 +40,7 @@ public class MoveSet
 		return moves;
 	}
 	
+	//Like getMoves but splits MOVE_AND_CAPTURE into two separate move identities with MOVE and the other CAPTURE
 	public Move[] getExpandedTypeMoves()
 	{
 		ArrayList<Move> expandedMoves = new ArrayList<Move>();

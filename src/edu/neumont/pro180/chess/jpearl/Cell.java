@@ -33,7 +33,6 @@ public class Cell
 			{
 				MoveSet potentialMoves = piece.getMoveSet();
 				ArrayList<Move> applicableMoves = potentialMoves.matchMoves( suggestion, piece.getDirection() );
-				//if (potentialMoves.containsMove( suggestion, piece.getDirection() ))
 				if (applicableMoves.size() > 0)
 				{
 					Location adjustedLocation = location.addMove( suggestion );
@@ -67,62 +66,18 @@ public class Cell
 	//Figures out if a move coincides with the board environment as defined by the given reference move. Returns if a move was made
 	private boolean considerMove( Move potentialMove, Move referenceMove, Cell toCell )
 	{
-		boolean moveWasMade = false;
-		
-		if( evaluateSpecialCases( potentialMove, referenceMove ) )
-		{
-			if ( referenceMove.getStyle() != MoveStyle.SLIDE || isSlideUnblocked( potentialMove, referenceMove ) )
-			{
-				if( potentialMove.getType() == MoveType.CAPTURE )
-				{
-					if (toCell.hasPiece())
-					{
-						if (toCell.getPiece().getColor() != piece.getColor())
-						{
-							placePieceAt( toCell );
-							moveWasMade = true;
-						}
-						else
-						{
-							System.out.println( "<<ILLEGAL CAPTURE -- OTHER PIECE BELONGS TO CAPTURING PLAYER>>" );
-						}
-					}
-					else
-					{
-						System.out.println( "<<ILLEGAL CAPTURE -- NO PIECE TO CAPTURE>>" );
-					}
-				}
-				else if( potentialMove.getType() == MoveType.MOVE )
-				{
-					if (!toCell.hasPiece())
-					{
-						placePieceAt( toCell );
-						moveWasMade = true;
-					}
-					else
-					{
-						System.out.println( "<<ILLEGAL MOVE -- NEW LOCATION IS OCCUPIED>>" );
-					}
-				}
-			}
-			else
-			{
-				System.out.println( "<<ILLEGAL MOVE -- SLIDE MOVEMENT IS BLOCKED>>" );
-			}
-		}
-		else
-		{
-			System.out.println( "<<POTENTIAL ILLEGAL MOVE -- POSSIBLE MOVE'S SPECIAL CASE WAS NOT SATISFIED>>" );
-		}
+		boolean moveWasMade = isMoveValid( potentialMove, referenceMove );
 		
 		if (moveWasMade)
 		{
+			placePieceAt( toCell );
 			board.getGame().giveNextPlayerControl();
 		}
 		
 		return moveWasMade;
 	}
 	
+	//Returns whether a move is possible
 	private boolean isMoveValid( Move potentialMove, Move referenceMove )
 	{
 		boolean result = false;

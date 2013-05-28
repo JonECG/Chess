@@ -22,11 +22,13 @@ public class ChessGame
 		board = new ChessBoard( this );
 	}
 
+	//Run a bare parser against the board
 	public void runParser( ChessParser parser )
 	{
 		parser.parseToBoard( board );
 	}
 	
+	//Pass the feedback loop to the user (for module 5)
 	public void passToUser()
 	{
 		Scanner scan = new Scanner( System.in );
@@ -68,6 +70,7 @@ public class ChessGame
 		}
 	}
 
+	//Sets up a loop which won't stop until a legal location has been inputted and is then returned
 	private Location getLocationFromInput( String prompt, Scanner scan )
 	{
 		boolean needsLegalInput = true;
@@ -90,6 +93,7 @@ public class ChessGame
 		return location;
 	}
 	
+	//Gets a pieces possible moves taking whether the cell has a piece and it is the player's current turn in account
 	private ArrayList<Move> getPossibleMovesForPiece( Location location )
 	{
 		Cell cell = board.getCell( location );

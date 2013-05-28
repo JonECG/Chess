@@ -26,8 +26,6 @@ public class Driver
 		
 		game.passToUser();
 		
-		//game.runParser( new ChessInputParser() );
-		
 		System.out.println( game );
 		
 		System.out.println( "Good Bye!" );
