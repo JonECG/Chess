@@ -36,6 +36,7 @@ public class ChessGame
 		while( true )
 		{
 			Location from = getLocationFromInput( "Type location containing piece:", scan );
+			
 			ArrayList<Move> moves = getPossibleMovesForPiece( from );
 			
 			if ( moves != null && moves.size() > 0 )
@@ -65,7 +66,6 @@ public class ChessGame
 			{
 				System.out.println( from + " cannot be moved from" );
 			}
-			
 			System.out.println( "\n" + this );
 		}
 	}
@@ -113,6 +113,43 @@ public class ChessGame
 			result = cell.getPossibleMoves();
 		}
 		return result;
+	}
+	
+	//Returns whether a piece at a location is safe from capture
+	private boolean isPieceSafe( Location pieceLocation )
+	{
+		boolean result = true;
+		
+		Cell cell = board.getCell( pieceLocation );
+		if ( !cell.hasPiece() )
+		{
+			throw new IllegalArgumentException( "There is no piece at the given location" );
+		}
+		
+		ArrayList<Cell> opposing = board.getAllCellsWithPiece( cell.getPiece().getColor().getOpposing() );
+		
+		for( Cell test : opposing )
+		{
+			if (result)
+			{
+				Move requiredMove = Move.makeFromLocations( test.getLocation(), pieceLocation, MoveType.CAPTURE );
+				result = !test.getPossibleMoves().contains( requiredMove );
+				//result = !test.isMoveValid( requiredMove );
+				if (!result)
+				{
+					System.out.println( test );
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	//
+	protected boolean isInCheck( Player player )
+	{
+		Cell cell = board.findPiece( player.getVitalPiece() );
+		return !isPieceSafe( cell.getLocation() );
 	}
 	
 	public String toString()

@@ -46,6 +46,8 @@ public class Cell
 							moveFound = considerMove( suggestion, move, adjustedCell );
 						}
 					}
+					
+					
 				}
 				else
 				{
@@ -66,19 +68,62 @@ public class Cell
 	//Figures out if a move coincides with the board environment as defined by the given reference move. Returns if a move was made
 	private boolean considerMove( Move potentialMove, Move referenceMove, Cell toCell )
 	{
-		boolean moveWasMade = isMoveValid( potentialMove, referenceMove );
+		boolean moveWasMade = isMovePossible( potentialMove, referenceMove );
 		
 		if (moveWasMade)
 		{
-			placePieceAt( toCell );
-			board.getGame().giveNextPlayerControl();
+			Piece heldPiece = placePieceAt( toCell );
+			
+			if ( board.getGame().isInCheck( board.getGame().getTurnColor().getDeclaredPlayer() ) )
+			{
+				System.out.println( "Your move has left yourself in check" );
+				System.out.println( "Your move will be undone." );
+				moveWasMade = false;
+			}
+			else
+			if ( board.getGame().isInCheck( board.getGame().getTurnColor().getOpposing().getDeclaredPlayer() ) )
+			{
+				System.out.println( "You have left your opponent in check" );
+			}
+			
+			if (moveWasMade)
+			{
+				board.getGame().giveNextPlayerControl();
+			}
+			else
+			{
+				//Rollback move
+				givePiece( toCell.takePiece() );
+				toCell.givePiece( heldPiece );
+			}
+			
+			
 		}
 		
 		return moveWasMade;
 	}
 	
 	//Returns whether a move is possible
-	private boolean isMoveValid( Move potentialMove, Move referenceMove )
+	public boolean isMoveValid( Move potentialMove )
+	{
+		boolean result = false;
+		
+		MoveSet potentialMoves = piece.getMoveSet();
+		ArrayList<Move> applicableMoves = potentialMoves.matchMoves( potentialMove, piece.getDirection() );
+
+		for( Move move : applicableMoves )
+		{
+			if( !result )
+			{
+				result = isMovePossible( potentialMove, move );
+			}
+		}
+		
+		return result;
+	}
+		
+	//Returns whether a move is possible
+	private boolean isMovePossible( Move potentialMove, Move referenceMove )
 	{
 		boolean result = false;
 		
@@ -198,7 +243,7 @@ public class Cell
 				if (move.getStyle() == MoveStyle.STEP )
 				{
 					relative = relative.addMove( move );
-					if(relative.isInBoard() &&  isMoveValid( move, move ) )
+					if(relative.isInBoard() &&  isMovePossible( move, move ) )
 						result.add( move );
 				}
 				else
@@ -207,7 +252,7 @@ public class Cell
 					Move nextMove = Move.makeFromLocations( location, relative, move.getType() );
 					do
 					{
-						if (relative.isInBoard() && isMoveValid(nextMove, move))
+						if (relative.isInBoard() && isMovePossible(nextMove, move))
 						{
 							result.add( nextMove );
 						}
@@ -224,15 +269,19 @@ public class Cell
 		return result;
 	}
 	
-	private void placePieceAt( Cell adjustedCell )
+	private Piece placePieceAt( Cell adjustedCell )
 	{
+		Piece heldPiece = null;
+		
 		piece.move();
 		if ( adjustedCell.hasPiece() )
 		{
-			adjustedCell.takePiece();
+			heldPiece = adjustedCell.takePiece();
 		}
 		adjustedCell.givePiece( piece );
 		piece = null;
+		
+		return heldPiece;
 	}
 
 	public void givePiece( Piece piece )
@@ -240,9 +289,11 @@ public class Cell
 		this.piece = piece;
 	}
 	
-	public void takePiece()
+	public Piece takePiece()
 	{
+		Piece heldPiece = piece;
 		piece = null;
+		return heldPiece;
 	}
 	
 	public boolean hasPiece()

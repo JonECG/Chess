@@ -10,6 +10,7 @@ public enum PieceColor
 	
 	private char representation;
 	private VerticalDirection verticalDirection;
+	private Player declaredPlayer;
 	
 	PieceColor( char representation, VerticalDirection verticalDirection )
 	{
@@ -43,8 +44,46 @@ public enum PieceColor
 		return representation;
 	}
 	
+	public PieceColor getOpposing()
+	{
+		PieceColor result;
+		if (this == PieceColor.DARK)
+		{
+			result = PieceColor.LIGHT;
+		}
+		else
+		{
+			result = PieceColor.DARK;
+		}
+		return result;
+	}
+	
+	public static PieceColor getOpposing( PieceColor check )
+	{
+		PieceColor result;
+		if (check == PieceColor.DARK)
+		{
+			result = PieceColor.LIGHT;
+		}
+		else
+		{
+			result = PieceColor.DARK;
+		}
+		return result;
+	}
+	
 	public VerticalDirection getVerticalDirection()
 	{
 		return verticalDirection;
+	}
+	
+	public Player getDeclaredPlayer()
+	{
+		return declaredPlayer;
+	}
+	
+	public void setDeclaredPlayer( Player player )
+	{
+		declaredPlayer = player;
 	}
 }
