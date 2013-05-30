@@ -31,8 +31,8 @@ public class Cell
 		{
 			if( piece.getColor() == board.getGame().getTurnColor() )
 			{
-				MoveSet potentialMoves = piece.getMoveSet();
-				ArrayList<Move> applicableMoves = potentialMoves.matchMoves( suggestion, piece.getDirection() );
+				MoveSet potentialMoves = piece.getMoveSetByColor();
+				ArrayList<Move> applicableMoves = potentialMoves.matchMoves( suggestion );
 				if (applicableMoves.size() > 0)
 				{
 					Location adjustedLocation = location.addMove( suggestion );
@@ -99,6 +99,8 @@ public class Cell
 			
 			
 		}
+		else
+		System.out.println( "INVALID?" );
 		
 		return moveWasMade;
 	}
@@ -108,8 +110,8 @@ public class Cell
 	{
 		boolean result = false;
 		
-		MoveSet potentialMoves = piece.getMoveSet();
-		ArrayList<Move> applicableMoves = potentialMoves.matchMoves( potentialMove, piece.getDirection() );
+		MoveSet potentialMoves = piece.getMoveSetByColor();
+		ArrayList<Move> applicableMoves = potentialMoves.matchMoves( potentialMove );
 
 		for( Move move : applicableMoves )
 		{
@@ -208,13 +210,14 @@ public class Cell
 		
 		int maxNumberOfTilesToCheck;
 		
+		
 		if ( slideReference.getDeltaX() == 0 )
 		{
-			maxNumberOfTilesToCheck = destination.getDeltaY()/slideReference.getDeltaY();
+			maxNumberOfTilesToCheck = Math.abs(destination.getDeltaY()/slideReference.getDeltaY());
 		}
 		else
 		{
-			maxNumberOfTilesToCheck = destination.getDeltaX()/slideReference.getDeltaX();
+			maxNumberOfTilesToCheck = Math.abs(destination.getDeltaX()/slideReference.getDeltaX());
 		}
 		
 		for( int i = 1; i < maxNumberOfTilesToCheck; i++ )

@@ -134,10 +134,9 @@ public class ChessGame
 			{
 				Move requiredMove = Move.makeFromLocations( test.getLocation(), pieceLocation, MoveType.CAPTURE );
 				result = !test.getPossibleMoves().contains( requiredMove );
-				//result = !test.isMoveValid( requiredMove );
 				if (!result)
 				{
-					System.out.println( test );
+					System.out.printf( "The piece %s has spotted an opportunity to take %s.\n", test, cell );
 				}
 			}
 		}

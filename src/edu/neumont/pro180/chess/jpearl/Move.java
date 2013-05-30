@@ -189,4 +189,9 @@ public class Move
 	{
 		return new Move( deltaX, -deltaY, type, style, getCases() ); 
 	}
+
+	public String toString()
+	{
+		return String.format( "Delta X: %s; Delta Y: %s; Style: %s", deltaX, deltaY, style );
+	}
 }

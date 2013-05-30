@@ -16,16 +16,16 @@ public class MoveSet
 	{
 		this.moves = moves;
 	}
-	
+
+
 	//Returns a list of moves in the moveset that match a given move in the given direction
-	public ArrayList<Move> matchMoves( Move testMove, VerticalDirection direction )
+	public ArrayList<Move> matchMoves( Move testMove )
 	{
 		ArrayList<Move> result = new ArrayList<Move>();
 		
-		Move relativeMove = new Move( testMove.getDeltaX(), testMove.getDeltaY()*direction.getDeltaY(), testMove.getType(), testMove.getStyle() );
 		for( Move move : moves )
 		{
-			if (relativeMove.equals( move ))
+			if (testMove.equals( move ))
 			{
 				result.add( move );
 			}
@@ -33,7 +33,6 @@ public class MoveSet
 		
 		return result;
 	}
-
 
 	public Move[] getMoves()
 	{

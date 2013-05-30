@@ -1,0 +1,11 @@
+--DARK PIECES--
+bdg6
+pdg7
+pdh6
+kdg8
+rde8
+pda7
+qdd3
+rdb2
+--LIGHT PIECES--
+qle6
