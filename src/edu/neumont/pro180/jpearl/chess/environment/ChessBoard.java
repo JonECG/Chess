@@ -2,10 +2,14 @@
  * @author JonathanPearl
  *
  */
-package edu.neumont.pro180.chess.jpearl;
+package edu.neumont.pro180.jpearl.chess.environment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import edu.neumont.pro180.jpearl.chess.ChessGame;
+import edu.neumont.pro180.jpearl.chess.pieces.Piece;
+import edu.neumont.pro180.jpearl.chess.pieces.PieceColor;
 
 
 public class ChessBoard

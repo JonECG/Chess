@@ -1,0 +1,12 @@
+--DARK PIECES--
+kde8
+--LIGHT PIECES--
+qla1
+qlb1
+qlc1
+qld1
+kle1
+qlf1
+qlg1
+qlh1
+--MOVEMENTS--

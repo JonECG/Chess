@@ -2,7 +2,8 @@
  * @author JonathanPearl
  *
  */
-package module1;
+package edu.neumont.pro180.jpearl.chess.pieces;
+
 
 public enum PieceRepresentation
 {
@@ -13,6 +14,33 @@ public enum PieceRepresentation
 	PieceRepresentation( char representation )
 	{
 		this.representation = representation;
+	}
+	
+	public Piece createPiece( PieceColor color )
+	{
+		Piece piece = null;
+		switch( this )
+		{
+		case KING:
+			piece = new King(color);
+			break;
+		case QUEEN:
+			piece = new Queen(color);
+			break;
+		case BISHOP:
+			piece = new Bishop(color);
+			break;
+		case KNIGHT:
+			piece = new Knight(color);
+			break;
+		case ROOK:
+			piece = new Rook(color);
+			break;
+		case PAWN:
+			piece = new Pawn(color);
+			break;
+		}
+		return piece;
 	}
 	
 	//Returns the enum value that is represented by a character

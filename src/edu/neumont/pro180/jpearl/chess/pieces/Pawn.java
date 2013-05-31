@@ -2,11 +2,11 @@
  * @author JonathanPearl
  *
  */
-package edu.neumont.pro180.chess.jpearl;
+package edu.neumont.pro180.jpearl.chess.pieces;
 
-import edu.neumont.pro180.chess.jpearl.Move.MoveCase;
-import edu.neumont.pro180.chess.jpearl.Move.MoveStyle;
-import edu.neumont.pro180.chess.jpearl.Move.MoveType;
+import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveCase;
+import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveStyle;
+import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveType;
 
 public class Pawn extends Piece
 {

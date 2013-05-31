@@ -2,12 +2,18 @@
  * @author JonathanPearl
  *
  */
-package edu.neumont.pro180.chess.jpearl;
+package edu.neumont.pro180.jpearl.chess;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import edu.neumont.pro180.chess.jpearl.Move.MoveType;
+import edu.neumont.pro180.jpearl.chess.environment.Cell;
+import edu.neumont.pro180.jpearl.chess.environment.ChessBoard;
+import edu.neumont.pro180.jpearl.chess.environment.Location;
+import edu.neumont.pro180.jpearl.chess.io.ChessParser;
+import edu.neumont.pro180.jpearl.chess.pieces.Move;
+import edu.neumont.pro180.jpearl.chess.pieces.PieceColor;
+import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveType;
 
 public class ChessGame
 {
@@ -145,10 +151,26 @@ public class ChessGame
 	}
 	
 	//
-	protected boolean isInCheck( Player player )
+	public boolean isInCheck( Player player )
 	{
 		Cell cell = board.findPiece( player.getVitalPiece() );
 		return !isPieceSafe( cell.getLocation() );
+	}
+	
+	public boolean isInCheckMate( Player player )
+	{
+		boolean result = true;
+		ArrayList<Cell> cells = board.getAllCellsWithPiece( player.getCommandingColor() );
+		
+		for( Cell cell : cells )
+		{
+			if (result)
+			{
+				result = !cell.hasChecklessMove();
+			}
+		}
+		
+		return result;
 	}
 	
 	public String toString()

@@ -2,11 +2,14 @@
  * @author JonathanPearl
  *
  */
-package edu.neumont.pro180.chess.jpearl;
+package edu.neumont.pro180.jpearl.chess;
+
+import edu.neumont.pro180.jpearl.chess.io.ChessFileParser;
+import edu.neumont.pro180.jpearl.chess.pieces.PieceColor;
 
 public class Driver
 {
-	private static final String PATH = "res\\log.txt";
+	private static final String PATH = "res\\checkmate.txt";
 	
 	/**
 	 * @param args

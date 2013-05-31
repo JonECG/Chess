@@ -2,11 +2,11 @@
  * @author JonathanPearl
  *
  */
-package edu.neumont.pro180.chess.jpearl;
+package edu.neumont.pro180.jpearl.chess.pieces;
 
 import java.util.ArrayList;
 
-import edu.neumont.pro180.chess.jpearl.Move.MoveType;
+import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveType;
 
 public class MoveSet
 {
@@ -18,7 +18,7 @@ public class MoveSet
 	}
 
 
-	//Returns a list of moves in the moveset that match a given move in the given direction
+	//Returns a list of moves in the moveset that match a given move
 	public ArrayList<Move> matchMoves( Move testMove )
 	{
 		ArrayList<Move> result = new ArrayList<Move>();

@@ -2,7 +2,9 @@
  * @author JonathanPearl
  *
  */
-package edu.neumont.pro180.chess.jpearl;
+package edu.neumont.pro180.jpearl.chess.environment;
+
+import edu.neumont.pro180.jpearl.chess.pieces.Move;
 
 public class Location
 {

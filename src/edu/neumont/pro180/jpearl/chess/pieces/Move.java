@@ -2,10 +2,12 @@
  * @author JonathanPearl
  *
  */
-package edu.neumont.pro180.chess.jpearl;
+package edu.neumont.pro180.jpearl.chess.pieces;
 
 import java.util.Arrays;
 import java.util.List;
+
+import edu.neumont.pro180.jpearl.chess.environment.Location;
 
 public class Move
 {

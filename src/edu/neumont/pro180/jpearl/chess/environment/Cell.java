@@ -2,13 +2,17 @@
  * @author JonathanPearl
  *
  */
-package edu.neumont.pro180.chess.jpearl;
+package edu.neumont.pro180.jpearl.chess.environment;
 
 import java.util.ArrayList;
 
-import edu.neumont.pro180.chess.jpearl.Move.MoveCase;
-import edu.neumont.pro180.chess.jpearl.Move.MoveStyle;
-import edu.neumont.pro180.chess.jpearl.Move.MoveType;
+import edu.neumont.pro180.jpearl.chess.Player;
+import edu.neumont.pro180.jpearl.chess.pieces.Move;
+import edu.neumont.pro180.jpearl.chess.pieces.MoveSet;
+import edu.neumont.pro180.jpearl.chess.pieces.Piece;
+import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveCase;
+import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveStyle;
+import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveType;
 
 
 public class Cell
@@ -83,7 +87,14 @@ public class Cell
 			else
 			if ( board.getGame().isInCheck( board.getGame().getTurnColor().getOpposing().getDeclaredPlayer() ) )
 			{
-				System.out.println( "You have left your opponent in check" );
+				if ( board.getGame().isInCheckMate( board.getGame().getTurnColor().getOpposing().getDeclaredPlayer() ) )
+				{
+					System.out.println( "You have left your opponent in checkmate. You win!" );
+				}
+				else
+				{
+					System.out.println( "You have left your opponent in check" );
+				}
 			}
 			
 			if (moveWasMade)
@@ -318,5 +329,29 @@ public class Cell
 	{
 		String pieceString = (piece != null) ? piece.toString() : "  ";
 		return pieceString + location;
+	}
+
+
+	public boolean hasChecklessMove()
+	{
+		boolean result = false;
+		ArrayList<Move> moves = getPossibleMoves();
+		Player controllingPlayer = piece.getColor().getDeclaredPlayer();
+		
+		for(Move move : moves)
+		{
+			if (!result)
+			{
+				Cell toCell = board.getCell( location.addMove( move ) );
+				Piece heldPiece = placePieceAt( toCell );
+				
+				result = !board.getGame().isInCheck( controllingPlayer );
+				
+				//Rollback
+				givePiece( toCell.takePiece() );
+				toCell.givePiece( heldPiece );
+			}
+		}
+		return result;
 	}
 }

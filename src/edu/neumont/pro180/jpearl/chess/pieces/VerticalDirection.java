@@ -2,7 +2,7 @@
  * @author JonathanPearl
  *
  */
-package edu.neumont.pro180.chess.jpearl;
+package edu.neumont.pro180.jpearl.chess.pieces;
 
 public enum VerticalDirection
 {

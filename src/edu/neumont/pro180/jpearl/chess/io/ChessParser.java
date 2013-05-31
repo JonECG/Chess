@@ -2,12 +2,19 @@
  * @author JonathanPearl
  *
  */
-package edu.neumont.pro180.chess.jpearl;
+package edu.neumont.pro180.jpearl.chess.io;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import edu.neumont.pro180.chess.jpearl.Move.MoveType;
+import edu.neumont.pro180.jpearl.chess.environment.Cell;
+import edu.neumont.pro180.jpearl.chess.environment.ChessBoard;
+import edu.neumont.pro180.jpearl.chess.environment.Location;
+import edu.neumont.pro180.jpearl.chess.pieces.Move;
+import edu.neumont.pro180.jpearl.chess.pieces.Piece;
+import edu.neumont.pro180.jpearl.chess.pieces.PieceColor;
+import edu.neumont.pro180.jpearl.chess.pieces.PieceRepresentation;
+import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveType;
 
 
 public abstract class ChessParser
