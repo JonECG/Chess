@@ -178,6 +178,11 @@ public class ChessGame
 		return getTurnColor() + "'s Turn to Move\n" + board.toString();
 	}
 	
+	public ChessBoard getChessBoard()
+	{
+		return board;
+	}
+	
 	public PieceColor getTurnColor()
 	{
 		return getCurrentPlayerTurn().getCommandingColor();

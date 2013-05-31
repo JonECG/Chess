@@ -85,8 +85,8 @@ public class ChessBoard
 		{
 			for( int x = 0; x < BOARD_SIZE ; x++ )
 			{
-				Location test = new Location( x, y );
-				Cell cell = board.get( test );
+				Location reference = new Location( x, y );
+				Cell cell = board.get( reference );
 				result += String.format( "[%s]", cell );
 			}
 			result += "\n";
