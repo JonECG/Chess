@@ -38,7 +38,7 @@ public class Driver
 		
 		
 		game.runParser( new ChessFileParser( path ) );
-		game.runParser( new ChessFileParser( "res\\test.txt" ) );
+		//game.runParser( new ChessFileParser( "res\\test.txt" ) );
 		
 		System.out.println( "\n" + game );
 		

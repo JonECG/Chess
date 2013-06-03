@@ -4,6 +4,7 @@
  */
 package edu.neumont.pro180.jpearl.chess.io;
 
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -112,6 +113,5 @@ public abstract class ChessParser
 		{
 			System.out.println( String.format( "%s is an invalid command", currentLine ) );
 		}
-		
 	}
 }
