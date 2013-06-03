@@ -4,6 +4,7 @@
  */
 package edu.neumont.pro180.jpearl.chess.view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -24,6 +25,7 @@ public class CellPanel extends JPanel
 	public CellPanel( Cell cell )
 	{
 		this.cell = cell;
+		setLayout( new BorderLayout() );
 		unhighlight();
 	}
 
@@ -36,12 +38,8 @@ public class CellPanel extends JPanel
 		if (cell.hasPiece() )
 		{
 			BufferedImage pieceImage = cell.getPiece().getImage();
-			//g.drawImage( pieceImage, 0, 0, getWidth(), getHeight(), 0, 0, pieceImage.getWidth(), pieceImage.getHeight(), null );
 			drawImageWithAspect( g, pieceImage, new IntegerRectangle( 0, 0, getWidth(), getHeight() ) );
-			//g.drawString( cell.getPiece().toString(), getWidth()/2, getHeight()/2 );
 		}
-		//g.setColor( Color.DARK_GRAY );
-		//g.drawString( cell.getLocation().toString(), 12, 12 );
 	}
 	
 	private static void drawImageWithAspect( Graphics g, BufferedImage image, IntegerRectangle area )

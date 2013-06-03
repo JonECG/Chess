@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import edu.neumont.pro180.jpearl.chess.environment.Cell;
+import edu.neumont.pro180.jpearl.chess.environment.Cell.TurnResult;
 import edu.neumont.pro180.jpearl.chess.environment.ChessBoard;
 import edu.neumont.pro180.jpearl.chess.environment.Location;
 import edu.neumont.pro180.jpearl.chess.pieces.Move;
@@ -79,8 +80,14 @@ public abstract class ChessParser
 			Cell movingPieceCell = board.getCell( locationFrom );
 			System.out.println( String.format( "%s represents a movement of a piece at %s to %s with a capture.", currentLine,
 					match.group(FIRST_MOVE_FROM_GROUP), match.group(FIRST_MOVE_TO_GROUP) ) );
-			movingPieceCell.suggestMove( inferredMove );
+			
+			TurnResult result = movingPieceCell.suggestMove( inferredMove );
 			System.out.println( board.getGame() );
+			
+			if (result == TurnResult.OPPONENT_CHECKMATE)
+			{
+				System.exit( 0 );
+			}
 		}
 		else
 		if ( currentLine.matches( REGEX_MOVE_WITHOUT_CAPTURE ) )
@@ -95,9 +102,16 @@ public abstract class ChessParser
 			System.out.println( String.format( "%s represents a movement of a piece at %s to %s.", currentLine,
 					match.group(FIRST_MOVE_FROM_GROUP), match.group(FIRST_MOVE_TO_GROUP) ) );
 			System.out.println();
-			movingPieceCell.suggestMove( inferredMove );
+			
+			TurnResult result = movingPieceCell.suggestMove( inferredMove );
+			
 			System.out.println();
 			System.out.println( board.getGame() );
+			
+			if (result == TurnResult.OPPONENT_CHECKMATE)
+			{
+				System.exit( 0 );
+			}
 		}
 //		else
 //		if ( currentLine.matches( REGEX_MOVE_TWO_PIECES ) )

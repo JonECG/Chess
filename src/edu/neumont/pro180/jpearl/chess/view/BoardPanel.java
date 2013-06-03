@@ -41,21 +41,26 @@ public class BoardPanel extends JPanel
 	private HashMap<Location,CellPanel> viewBoard;
 	private ChoicePhase currentPhase;
 	private ChessGame game;
+	private ChessBoard board;
 	private JFrame frame;
+	private static final int BORDER_SIZE = 35;
 	
 	
 	
 	public BoardPanel( JFrame frame, ChessBoard board )
 	{
+		this.board = board;
 		this.frame = frame;
-		viewBoard = new HashMap<Location,CellPanel>();
 		this.game = board.getGame();
+		
+		viewBoard = new HashMap<Location,CellPanel>();
 		currentPhase = ChoicePhase.CHOOSING_PIECE;
+		
 		GridLayout boardLayout = new GridLayout(ChessBoard.BOARD_SIZE,ChessBoard.BOARD_SIZE);
 		setLayout( boardLayout );
-		this.setBackground( Color.BLACK );
-
 		
+		setBackground( Color.BLACK );
+
 		for( int y = ChessBoard.BOARD_SIZE-1; y >= 0; y-- )
 		{
 			for( int x = 0; x < ChessBoard.BOARD_SIZE ; x++ )
@@ -67,8 +72,13 @@ public class BoardPanel extends JPanel
 				add( panel );
 				panel.addMouseListener( new CellClickListener(this, cell) );
 				viewBoard.put( reference, panel );
+				repaint();
 			}
 		}
+		
+		updateBorder();
+		revalidate();
+		repaint();
 	}
 	
 	public void processClick( Cell cell )
@@ -86,8 +96,6 @@ public class BoardPanel extends JPanel
 				fromCell = cell;
 				currentPhase = ChoicePhase.CHOOSING_MOVEMENT;
 			}
-			
-			repaint();
 			break;
 			
 		case CHOOSING_MOVEMENT:
@@ -125,12 +133,19 @@ public class BoardPanel extends JPanel
 				break;
 			}
 			
-			repaint();
 			break;
 		}
 		System.out.println( cell.getLocation().toString() );
+		repaint();
+		updateBorder();
 	}
 
+	private void updateBorder()
+	{
+		setBorder(BorderFactory.createMatteBorder( BORDER_SIZE, BORDER_SIZE, BORDER_SIZE, BORDER_SIZE, board.getGame().getCurrentPlayerTurn().getCommandingColor().getPlayerTurnColor()));
+
+	}
+	
 	private void highlightMoves( Location location, ArrayList<Move> moves )
 	{
 		for( Move move : moves )

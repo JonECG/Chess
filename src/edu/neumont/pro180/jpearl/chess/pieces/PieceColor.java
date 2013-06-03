@@ -4,20 +4,24 @@
  */
 package edu.neumont.pro180.jpearl.chess.pieces;
 
+import java.awt.Color;
+
 import edu.neumont.pro180.jpearl.chess.Player;
 
 public enum PieceColor
 {
-	LIGHT('l', VerticalDirection.UP ), DARK('d', VerticalDirection.DOWN );
+	LIGHT('l', VerticalDirection.UP, Color.WHITE ), DARK('d', VerticalDirection.DOWN, Color.GRAY );
 	
 	private char representation;
 	private VerticalDirection verticalDirection;
 	private Player declaredPlayer;
+	private Color playerTurnColor;
 	
-	PieceColor( char representation, VerticalDirection verticalDirection )
+	PieceColor( char representation, VerticalDirection verticalDirection, Color playerTurnColor )
 	{
 		this.representation = representation;
 		this.verticalDirection = verticalDirection;
+		this.playerTurnColor = playerTurnColor;
 	}
 	
 	//Returns the enum value that is represented by a character
@@ -82,6 +86,11 @@ public enum PieceColor
 	public Player getDeclaredPlayer()
 	{
 		return declaredPlayer;
+	}
+	
+	public Color getPlayerTurnColor()
+	{
+		return playerTurnColor;
 	}
 	
 	public void setDeclaredPlayer( Player player )

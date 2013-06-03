@@ -34,71 +34,6 @@ public class ChessGame
 		parser.parseToBoard( board );
 	}
 	
-	//Pass the feedback loop to the user (for module 5)
-	public void passToUser()
-	{
-		Scanner scan = new Scanner( System.in );
-		
-		while( true )
-		{
-			Location from = getLocationFromInput( "Type location containing piece:", scan );
-			
-			ArrayList<Move> moves = getPossibleMovesForPiece( from );
-			
-			if ( moves != null && moves.size() > 0 )
-			{
-				String output = from + " can move to: ";
-				for( Move move : moves )
-				{
-					output += from.addMove( move ) + (move.getType()==MoveType.MOVE? "" : "*" ) + ", " ;
-				}
-				System.out.println( output + "\n");
-				
-				Location to = getLocationFromInput( "Type location to move this piece to", scan );
-				MoveType type;
-				
-				if ( board.getCell( to ).hasPiece() )
-				{
-					type = MoveType.CAPTURE;
-				}
-				else
-				{
-					type = MoveType.MOVE;
-				}
-				
-				board.getCell( from ).suggestMove( Move.makeFromLocations( from, to, type ) );
-			}
-			else
-			{
-				System.out.println( from + " cannot be moved from" );
-			}
-			System.out.println( "\n" + this );
-		}
-	}
-
-	//Sets up a loop which won't stop until a legal location has been inputted and is then returned
-	private Location getLocationFromInput( String prompt, Scanner scan )
-	{
-		boolean needsLegalInput = true;
-		Location location = null;
-		
-		while( needsLegalInput )
-		{
-			System.out.println( prompt );
-			try
-			{
-				location = Location.parseFromCoordinates( scan.nextLine() );
-				needsLegalInput = false;
-			}
-			catch( IllegalArgumentException e )
-			{
-				System.out.println( e.getMessage() );
-			}
-		}
-		
-		return location;
-	}
-	
 	//Gets a pieces possible moves taking whether the cell has a piece and it is the player's current turn in account
 	public ArrayList<Move> getPossibleMovesForPiece( Location location )
 	{
@@ -140,17 +75,12 @@ public class ChessGame
 			{
 				Move requiredMove = Move.makeFromLocations( test.getLocation(), pieceLocation, MoveType.CAPTURE );
 				result = !test.getPossibleMoves().contains( requiredMove );
-				if (!result)
-				{
-					System.out.printf( "The piece %s has spotted an opportunity to take %s.\n", test, cell );
-				}
 			}
 		}
 		
 		return result;
 	}
 	
-	//
 	public boolean isInCheck( Player player )
 	{
 		Cell cell = board.findPiece( player.getVitalPiece() );

@@ -28,11 +28,4 @@ public class CellClickListener extends MouseAdapter
 		board.processClick( cell );
 	}
 
-
-//	@Override
-//	public void mouseClicked( MouseEvent e )
-//	{
-//		// TODO Auto-generated method stub
-//		
-//	}
 }
