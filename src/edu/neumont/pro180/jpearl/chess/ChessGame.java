@@ -100,7 +100,7 @@ public class ChessGame
 	}
 	
 	//Gets a pieces possible moves taking whether the cell has a piece and it is the player's current turn in account
-	private ArrayList<Move> getPossibleMovesForPiece( Location location )
+	public ArrayList<Move> getPossibleMovesForPiece( Location location )
 	{
 		Cell cell = board.getCell( location );
 		ArrayList<Move> result = null;

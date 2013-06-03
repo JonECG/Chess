@@ -21,6 +21,8 @@ public class Cell
 	private Location location;
 	private ChessBoard board;
 	
+	public enum TurnResult{ NO_MOVE_MADE, NORMAL_MOVE, SELF_CHECK, OPPONENT_CHECK, OPPONENT_CHECKMATE };
+	
 	public Cell( int x, int y, ChessBoard board )
 	{
 		location = new Location( x, y );
@@ -28,9 +30,11 @@ public class Cell
 		this.board = board;
 	}
 	
-	//Gives the cell a move for it to check against, if it has a piece, its piece's moveset.
-	public void suggestMove( Move suggestion )
+	//Gives the cell a move for it to check against, if it has a piece, its piece's moveset. Returns if move successful.
+	public TurnResult suggestMove( Move suggestion )
 	{
+		TurnResult result = TurnResult.NO_MOVE_MADE;
+		
 		if ( piece != null )
 		{
 			if( piece.getColor() == board.getGame().getTurnColor() )
@@ -42,39 +46,26 @@ public class Cell
 					Location adjustedLocation = location.addMove( suggestion );
 					Cell adjustedCell = board.getCell( adjustedLocation );
 					
-					boolean moveFound = false;
+					
 					for( Move move : applicableMoves )
 					{
-						if( !moveFound )
+						if( result == TurnResult.NO_MOVE_MADE )
 						{
-							moveFound = considerMove( suggestion, move, adjustedCell );
+							result = considerMove( suggestion, move, adjustedCell );
 						}
 					}
-					
-					
-				}
-				else
-				{
-					System.out.println( "<<ILLEGAL MOVE -- NOT IN MOVESET FOR PIECE>>" );
 				}
 			}
-			else
-			{
-				System.out.println( "<<ILLEGAL MOVE -- NOT " + piece.getColor() + "'S TURN>>" );
-			}
 		}
-		else
-		{
-			System.out.println( "<<ILLEGAL MOVE -- THERE IS NO PIECE TO MOVE>>" );
-		}
+		return result;
 	}
 	
 	//Figures out if a move coincides with the board environment as defined by the given reference move. Returns if a move was made
-	private boolean considerMove( Move potentialMove, Move referenceMove, Cell toCell )
+	private TurnResult considerMove( Move potentialMove, Move referenceMove, Cell toCell )
 	{
-		boolean moveWasMade = isMovePossible( potentialMove, referenceMove );
-		
-		if (moveWasMade)
+		TurnResult result = TurnResult.NO_MOVE_MADE;
+		boolean isPossible = isMovePossible( potentialMove, referenceMove );
+		if ( isPossible )
 		{
 			Piece heldPiece = placePieceAt( toCell );
 			
@@ -82,7 +73,8 @@ public class Cell
 			{
 				System.out.println( "Your move has left yourself in check" );
 				System.out.println( "Your move will be undone." );
-				moveWasMade = false;
+				result = TurnResult.SELF_CHECK;
+				isPossible = false;
 			}
 			else
 			if ( board.getGame().isInCheck( board.getGame().getTurnColor().getOpposing().getDeclaredPlayer() ) )
@@ -90,15 +82,21 @@ public class Cell
 				if ( board.getGame().isInCheckMate( board.getGame().getTurnColor().getOpposing().getDeclaredPlayer() ) )
 				{
 					System.out.println( "You have left your opponent in checkmate. You win!" );
+					result = TurnResult.OPPONENT_CHECKMATE;
 				}
 				else
 				{
 					System.out.println( "You have left your opponent in check" );
+					result = TurnResult.OPPONENT_CHECK;
 				}
 			}
 			
-			if (moveWasMade)
+			if (isPossible)
 			{
+				if (result == TurnResult.NO_MOVE_MADE)
+				{
+					result = TurnResult.NORMAL_MOVE;
+				}
 				board.getGame().giveNextPlayerControl();
 			}
 			else
@@ -106,14 +104,13 @@ public class Cell
 				//Rollback move
 				givePiece( toCell.takePiece() );
 				toCell.givePiece( heldPiece );
+				piece.undoMove();
 			}
 			
 			
 		}
-		else
-		System.out.println( "INVALID?" );
 		
-		return moveWasMade;
+		return result;
 	}
 	
 	//Returns whether a move is possible
@@ -177,7 +174,7 @@ public class Cell
 		
 		if (evaluating.hasCase( MoveCase.ON_PIECE_FIRST_MOVE ) )
 		{
-			if (piece.hasMoved())
+			if (piece.getNumberOfMoves() > 0)
 			{
 				result = false;
 			}
@@ -350,6 +347,7 @@ public class Cell
 				//Rollback
 				givePiece( toCell.takePiece() );
 				toCell.givePiece( heldPiece );
+				piece.undoMove();
 			}
 		}
 		return result;

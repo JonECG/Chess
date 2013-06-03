@@ -4,16 +4,23 @@
  */
 package edu.neumont.pro180.jpearl.chess.pieces;
 
+import java.awt.image.BufferedImage;
+
+import edu.neumont.pro180.jpearl.chess.io.CachedImageLoader;
+
 
 public abstract class Piece
 {
 	private PieceColor color;
-	private boolean hasMovedBefore;
+	private BufferedImage image;
+	private int numberOfMoves;
 	
  	public Piece( PieceColor color )
 	{
- 		hasMovedBefore = false;
+ 		numberOfMoves = 0;
 		this.color = color;
+		
+		image = CachedImageLoader.loadImageFromPath( String.format( "res\\pieces\\%s.png", toString() ) );
 	}
 	
 	public abstract MoveSet getMoveSet();
@@ -54,14 +61,24 @@ public abstract class Piece
 		return color.getVerticalDirection();
 	}
 	
-	public boolean hasMoved()
+	public BufferedImage getImage()
 	{
-		return hasMovedBefore;
+		return image;
+	}
+	
+	public int getNumberOfMoves()
+	{
+		return numberOfMoves;
 	}
 	
 	public void move()
 	{
-		hasMovedBefore = true;
+		numberOfMoves += 1;
+	}
+	
+	public void undoMove()
+	{
+		numberOfMoves -= 1;
 	}
 	
 	public String toString()
