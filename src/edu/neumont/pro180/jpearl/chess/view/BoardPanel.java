@@ -5,21 +5,14 @@
 package edu.neumont.pro180.jpearl.chess.view;
 
 import java.awt.Color;
-import java.awt.Dialog;
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 
 import javax.swing.BorderFactory;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 
 import edu.neumont.pro180.jpearl.chess.ChessGame;
 import edu.neumont.pro180.jpearl.chess.controller.CellClickListener;
@@ -28,7 +21,6 @@ import edu.neumont.pro180.jpearl.chess.environment.Cell.TurnResult;
 import edu.neumont.pro180.jpearl.chess.environment.ChessBoard;
 import edu.neumont.pro180.jpearl.chess.environment.Location;
 import edu.neumont.pro180.jpearl.chess.pieces.Move;
-import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveCase;
 import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveType;
 
 public class BoardPanel extends JPanel
@@ -36,7 +28,6 @@ public class BoardPanel extends JPanel
 	private enum ChoicePhase{ CHOOSING_PIECE, CHOOSING_MOVEMENT };
 	
 	private static final long serialVersionUID = 4544274521677797026L;
-	private static final int BUFFER = 16;
 	private Cell fromCell;
 	private HashMap<Location,CellPanel> viewBoard;
 	private ChoicePhase currentPhase;
@@ -135,7 +126,6 @@ public class BoardPanel extends JPanel
 			
 			break;
 		}
-		System.out.println( cell.getLocation().toString() );
 		repaint();
 		updateBorder();
 	}

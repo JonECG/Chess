@@ -71,8 +71,8 @@ public class Cell
 			
 			if ( board.getGame().isInCheck( board.getGame().getTurnColor().getDeclaredPlayer() ) )
 			{
-				System.out.println( "Your move has left yourself in check" );
-				System.out.println( "Your move will be undone." );
+				//System.out.println( "Your move has left yourself in check" );
+				//System.out.println( "Your move will be undone." );
 				result = TurnResult.SELF_CHECK;
 				isPossible = false;
 			}
@@ -81,12 +81,12 @@ public class Cell
 			{
 				if ( board.getGame().isInCheckMate( board.getGame().getTurnColor().getOpposing().getDeclaredPlayer() ) )
 				{
-					System.out.println( "You have left your opponent in checkmate. You win!" );
+					//System.out.println( "You have left your opponent in checkmate. You win!" );
 					result = TurnResult.OPPONENT_CHECKMATE;
 				}
 				else
 				{
-					System.out.println( "You have left your opponent in check" );
+					//System.out.println( "You have left your opponent in check" );
 					result = TurnResult.OPPONENT_CHECK;
 				}
 			}
@@ -97,6 +97,10 @@ public class Cell
 				{
 					result = TurnResult.NORMAL_MOVE;
 				}
+				
+				char append = ( potentialMove.getType() == MoveType.CAPTURE ? '*' : 0 );
+				System.out.println( String.format("%s %s%c", location.toString(), location.addMove( referenceMove ).toString(), append ) );
+				
 				board.getGame().giveNextPlayerControl();
 			}
 			else

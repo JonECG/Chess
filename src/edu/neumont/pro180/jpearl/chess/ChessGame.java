@@ -5,7 +5,6 @@
 package edu.neumont.pro180.jpearl.chess;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import edu.neumont.pro180.jpearl.chess.environment.Cell;
 import edu.neumont.pro180.jpearl.chess.environment.ChessBoard;
@@ -40,16 +39,7 @@ public class ChessGame
 		Cell cell = board.getCell( location );
 		ArrayList<Move> result = null;
 		
-		if (!cell.hasPiece())
-		{
-			System.out.println( location + " has no piece on it" );
-		}
-		else
-		if (cell.getPiece().getColor() != playerRoster[playerTurnIndex].getCommandingColor())
-		{
-			System.out.println( "You can't select your opponent's piece" );
-		}
-		else
+		if (cell.hasPiece() && cell.getPiece().getColor() == playerRoster[playerTurnIndex].getCommandingColor())
 		{
 			result = cell.getPossibleMoves();
 		}

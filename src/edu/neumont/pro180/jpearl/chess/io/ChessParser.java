@@ -4,7 +4,6 @@
  */
 package edu.neumont.pro180.jpearl.chess.io;
 
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,15 +24,15 @@ public abstract class ChessParser
 	private static final String REGEX_PLACE_PIECE = "([kqbrnp][ld])([a-h][1-8])";
 	private static final String REGEX_MOVE_WITH_CAPTURE = "([a-h][1-8]) ([a-h][1-8])\\*";
 	private static final String REGEX_MOVE_WITHOUT_CAPTURE = "([a-h][1-8]) ([a-h][1-8])";
-	private static final String REGEX_MOVE_TWO_PIECES = "([a-h][1-8]) ([a-h][1-8]) ([a-h][1-8]) ([a-h][1-8])";
+	//private static final String REGEX_MOVE_TWO_PIECES = "([a-h][1-8]) ([a-h][1-8]) ([a-h][1-8]) ([a-h][1-8])";
 	
 	//Represents the regex capture groups holding pertinent information
 	private static final int NEW_PIECE_DESCRIPTION_GROUP = 1;
 	private static final int NEW_PIECE_POSITION_GROUP = 2;
 	private static final int FIRST_MOVE_FROM_GROUP = 1;
 	private static final int FIRST_MOVE_TO_GROUP = 2;
-	private static final int SECOND_MOVE_FROM_GROUP = 3;
-	private static final int SECOND_MOVE_TO_GROUP = 4;
+	//private static final int SECOND_MOVE_FROM_GROUP = 3;
+	//private static final int SECOND_MOVE_TO_GROUP = 4;
 	
 
 	//Starts running the parser to the board

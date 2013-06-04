@@ -7,15 +7,11 @@ package edu.neumont.pro180.jpearl.chess.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-import edu.neumont.pro180.jpearl.chess.controller.CellClickListener;
 import edu.neumont.pro180.jpearl.chess.environment.Cell;
-import edu.neumont.pro180.jpearl.chess.environment.ChessBoard;
 
 public class CellPanel extends JPanel
 {

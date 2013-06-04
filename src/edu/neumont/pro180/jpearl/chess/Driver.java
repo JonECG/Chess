@@ -5,7 +5,6 @@
 package edu.neumont.pro180.jpearl.chess;
 
 import java.awt.Dimension;
-import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 
