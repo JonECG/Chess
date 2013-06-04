@@ -98,7 +98,7 @@ public class Cell
 					result = TurnResult.NORMAL_MOVE;
 				}
 				
-				char append = ( potentialMove.getType() == MoveType.CAPTURE ? '*' : 0 );
+				char append = ( potentialMove.getType() == MoveType.CAPTURE ? '*' : ' ' );
 				System.out.println( String.format("%s %s%c", location.toString(), location.addMove( referenceMove ).toString(), append ) );
 				
 				board.getGame().giveNextPlayerControl();
