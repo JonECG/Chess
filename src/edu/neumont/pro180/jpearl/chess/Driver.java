@@ -31,16 +31,17 @@ public class Driver
 		Dimension preferred = new Dimension(DEFAULT_SIZE,DEFAULT_SIZE);
 		frame.setPreferredSize( preferred );
 		
-		frame.add( new BoardPanel(frame, game.getChessBoard()) );
-		
-		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-		frame.pack();
-		
 		
 		//TODO: Prompt for player types
 		
 //		game.addNewPlayer( new HumanPlayer( PieceColor.LIGHT, game ) );
 //		game.addNewPlayer( new HumanPlayer( PieceColor.DARK, game ) );
+		
+		
+		frame.add( new BoardPanel(frame, game.getChessBoard()) );
+		
+		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+		frame.pack();
 		
 		game.runParser( new ChessFileParser( path ) );
 		
