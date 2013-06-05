@@ -31,8 +31,9 @@ public class ChessGame
 	{
 		while( true )
 		{
+			System.out.println(getCurrentPlayerTurn().getCommandingColor());
 			getCurrentPlayerTurn().takeTurn();
-			giveNextPlayerControl();
+			//giveNextPlayerControl();
 		}
 	}
 	

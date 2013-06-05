@@ -39,7 +39,8 @@ public class Driver
         Object selected = gameTypeOptionPane.getValue();
         System.out.println( selected );
         if(selected.equals( options[0]) ){
-            // random ai
+        	game.addNewPlayer( new RandomAIPlayer( PieceColor.LIGHT, game ) );
+            game.addNewPlayer( new RandomAIPlayer( PieceColor.DARK, game ) );
         }
         if(selected.equals( options[1]) ){
             // smart ai
@@ -62,6 +63,8 @@ public class Driver
 		
 		frame.setVisible( true );
 		frame.setLocationRelativeTo( null );
+		
+		game.playGame();
 	}
 
 }
