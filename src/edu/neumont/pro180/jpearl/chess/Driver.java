@@ -6,7 +6,7 @@ package edu.neumont.pro180.jpearl.chess;
 
 import java.awt.Dimension;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 import edu.neumont.pro180.jpearl.chess.io.ChessFileParser;
 import edu.neumont.pro180.jpearl.chess.pieces.PieceColor;
@@ -28,14 +28,26 @@ public class Driver
 		
 		JFrame frame = new JFrame( "Chess and things" );
 		
-		Dimension preferred = new Dimension(DEFAULT_SIZE,DEFAULT_SIZE);
+		Dimension preferred = new Dimension( DEFAULT_SIZE,DEFAULT_SIZE );
 		frame.setPreferredSize( preferred );
-		
-		
-		//TODO: Prompt for player types
-		
-//		game.addNewPlayer( new HumanPlayer( PieceColor.LIGHT, game ) );
-//		game.addNewPlayer( new HumanPlayer( PieceColor.DARK, game ) );
+
+        //TODO: Prompt for player types
+        Object[] options = { "Random AI", "Smart AI", "Human" };
+        JOptionPane gameTypeOptionPane = new JOptionPane( "Choose a game type", JOptionPane.DEFAULT_OPTION, JOptionPane.DEFAULT_OPTION, null, options, options[0] );
+        JDialog gameTypeDialog = gameTypeOptionPane.createDialog( null, "Chess and things" );
+        gameTypeDialog.setVisible( true );
+        Object selected = gameTypeOptionPane.getValue();
+        System.out.println( selected );
+        if(selected.equals( options[0]) ){
+            // random ai
+        }
+        if(selected.equals( options[1]) ){
+            // smart ai
+        }
+        if(selected.equals( options[2]) ){
+            game.addNewPlayer( new HumanPlayer( PieceColor.LIGHT, game ) );
+            game.addNewPlayer( new HumanPlayer( PieceColor.DARK, game ) );
+        }
 		
 		
 		frame.add( new BoardPanel(frame, game.getChessBoard()) );
