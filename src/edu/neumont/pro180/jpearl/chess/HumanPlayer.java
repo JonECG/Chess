@@ -18,6 +18,17 @@ public class HumanPlayer extends Player
 	@Override
 	public void takeTurn()
 	{
+//		try
+//		{
+//			synchronized( this )
+//			{
+//				Thread.currentThread().wait();
+//			}
+//		}
+//		catch ( InterruptedException e )
+//		{
+//			System.out.println( "The main thread has been interrupted" );
+//		}
 	}
 
 }

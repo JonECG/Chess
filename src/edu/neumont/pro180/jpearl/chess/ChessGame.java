@@ -27,6 +27,15 @@ public class ChessGame
 		board = new ChessBoard( this );
 	}
 
+	public void playGame()
+	{
+		while( true )
+		{
+			getCurrentPlayerTurn().takeTurn();
+			giveNextPlayerControl();
+		}
+	}
+	
 	//Run a bare parser against the board
 	public void runParser( ChessParser parser )
 	{
@@ -119,7 +128,7 @@ public class ChessGame
 	}
 
 
-	public void addNewPlayer( HumanPlayer player )
+	public void addNewPlayer( Player player )
 	{
 		Player[] newPlayerRoster = new Player[playerRoster.length + 1];
 		for( int i = 0; i < playerRoster.length; i++ )
@@ -128,5 +137,22 @@ public class ChessGame
 		}
 		newPlayerRoster[ playerRoster.length ] = player;
 		playerRoster = newPlayerRoster;
+	}
+
+
+	public ArrayList<Action> getAllActions( PieceColor commandingColor )
+	{
+		ArrayList<Action> result = new ArrayList<Action>();
+		
+		ArrayList<Cell> cellPieces = getChessBoard().getAllCellsWithPiece( commandingColor );
+		for( Cell cell : cellPieces )
+		{
+			for( Move move : cell.getPossibleMoves() )
+			{
+				result.add( new Action( cell, move ) );
+			}
+		}
+		
+		return result;
 	}
 }
