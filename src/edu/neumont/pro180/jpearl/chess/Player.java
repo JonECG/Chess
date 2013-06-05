@@ -8,13 +8,15 @@ import edu.neumont.pro180.jpearl.chess.pieces.Piece;
 import edu.neumont.pro180.jpearl.chess.pieces.PieceColor;
 
 
-public class Player
+public abstract class Player
 {
 	private PieceColor commandingColor;
 	private Piece vitalPiece;
+	private ChessGame game;
 	
-	public Player( PieceColor commandingColor )
+	public Player( PieceColor commandingColor, ChessGame game )
 	{
+		this.game = game;
 		this.commandingColor = commandingColor;
 		commandingColor.setDeclaredPlayer( this );
 	}
@@ -32,5 +34,12 @@ public class Player
 	public void setVitalPiece( Piece piece )
 	{
 		vitalPiece = piece;
+	}
+	
+	public abstract void takeTurn();
+	
+	protected ChessGame getGame()
+	{
+		return game;
 	}
 }

@@ -24,12 +24,7 @@ public class Driver
 	{		
 		String path = (args.length == 1) ? args[0] : PATH;
 		
-		ChessGame game = new ChessGame(
-				new Player( PieceColor.LIGHT ),
-				new Player( PieceColor.DARK)
-				);
-		
-		game.runParser( new ChessFileParser( path ) );
+		ChessGame game = new ChessGame();
 		
 		JFrame frame = new JFrame( "Chess and things" );
 		
@@ -40,6 +35,17 @@ public class Driver
 		
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		frame.pack();
+		
+		
+		//TODO: Prompt for player types
+		
+//		game.addNewPlayer( new HumanPlayer( PieceColor.LIGHT, game ) );
+//		game.addNewPlayer( new HumanPlayer( PieceColor.DARK, game ) );
+		
+		game.runParser( new ChessFileParser( path ) );
+		
+		
+		frame.repaint();
 		
 		frame.setVisible( true );
 		frame.setLocationRelativeTo( null );

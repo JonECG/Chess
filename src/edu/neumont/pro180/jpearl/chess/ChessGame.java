@@ -117,4 +117,16 @@ public class ChessGame
 	{
 		playerTurnIndex = ( playerTurnIndex + 1 ) % playerRoster.length;
 	}
+
+
+	public void addNewPlayer( HumanPlayer player )
+	{
+		Player[] newPlayerRoster = new Player[playerRoster.length + 1];
+		for( int i = 0; i < playerRoster.length; i++ )
+		{
+			newPlayerRoster[i] = playerRoster[i];
+		}
+		newPlayerRoster[ playerRoster.length ] = player;
+		playerRoster = newPlayerRoster;
+	}
 }
