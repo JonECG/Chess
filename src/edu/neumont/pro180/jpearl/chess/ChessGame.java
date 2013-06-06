@@ -38,7 +38,8 @@ public class ChessGame
 		{
 			System.out.println(getCurrentPlayerTurn().getCommandingColor());
 			getCurrentPlayerTurn().takeTurn();
-			display.repaint();
+			//display.repaint( 0 );
+			//display.repaint();
 			//giveNextPlayerControl();
 		}
 	}
@@ -152,17 +153,22 @@ public class ChessGame
 		ArrayList<Action> result = new ArrayList<Action>();
 		
 		ArrayList<Cell> cellPieces = getChessBoard().getAllCellsWithPiece( commandingColor );
+		
+		board.digSimulation();
+		
 		for( Cell cell : cellPieces )
 		{
 			for( Move move : cell.getPossibleMoves() )
 			{
 				//cell.simulateMove( move );cell.simulateMove( move );cell.simulateMove( move );cell.simulateMove( move );cell.simulateMove( move );
-				if (cell.simulateMove( move ) != TurnResult.SELF_CHECK )
+				if (cell.resultOfMove( move ) != TurnResult.SELF_CHECK )
 				{
 					result.add( new Action( cell, move, board.getCell( cell.getLocation().addMove( move ) ) ) );
 				}
 			}
 		}
+		
+		board.rollBackSimulation();
 		
 		return result;
 	}

@@ -17,10 +17,12 @@ public class ChessBoard
 	private HashMap<Location,Cell> board;
 	public static final int BOARD_SIZE = 8;
 	private ChessGame game;
+	private int simulationLayer;
 	
 	//Create the board and initiate the cells inside it
 	public ChessBoard(ChessGame game)
 	{
+		simulationLayer = 0;
 		board = new HashMap<Location,Cell>();
 		for( int i = 0; i < BOARD_SIZE; i++ )
 		{
@@ -94,8 +96,28 @@ public class ChessBoard
 		return result;
 	}
 	
-	protected void rollbackTurn()
+	public void digSimulation()
 	{
+		simulationLayer += 1;
+		
+		for( int i = 0; i < BOARD_SIZE; i++ )
+		{
+			for( int j = 0; j < BOARD_SIZE; j++ )
+			{
+				Cell cell = getCell( new Location( i, j ) );
+				cell.mirrorForSimulation();
+			}
+		}
+	}
+	
+	public void rollBackSimulation()
+	{
+		simulationLayer -= 1;
+	}
+	
+	public int getSimulationLevel()
+	{
+		return simulationLayer;
 	}
 	
 	public ChessGame getGame()

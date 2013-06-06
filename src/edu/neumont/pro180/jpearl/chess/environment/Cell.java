@@ -13,20 +13,24 @@ import edu.neumont.pro180.jpearl.chess.pieces.Piece;
 import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveCase;
 import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveStyle;
 import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveType;
+import edu.neumont.pro180.jpearl.chess.view.CellPanel;
 
 
 public class Cell
 {
-	private Piece piece;
+	private ArrayList<Piece> pieceLevels;
 	private Location location;
 	private ChessBoard board;
+	private CellPanel viewEquivalent;
 	
 	public enum TurnResult{ NO_MOVE_MADE, NORMAL_MOVE, SELF_CHECK, OPPONENT_CHECK, OPPONENT_CHECKMATE };
 	
 	public Cell( int x, int y, ChessBoard board )
 	{
+		viewEquivalent = null;
 		location = new Location( x, y );
-		piece = null;
+		pieceLevels = new ArrayList<Piece>();
+		pieceLevels.add( null );
 		this.board = board;
 	}
 	
@@ -35,11 +39,11 @@ public class Cell
 	{
 		TurnResult result = TurnResult.NO_MOVE_MADE;
 		
-		if ( piece != null )
+		if ( getPiece() != null )
 		{
-			if( piece.getColor() == board.getGame().getTurnColor() )
+			if( getPiece().getColor() == board.getGame().getTurnColor() )
 			{
-				MoveSet potentialMoves = piece.getMoveSetByColor();
+				MoveSet potentialMoves = getPiece().getMoveSetByColor();
 				ArrayList<Move> applicableMoves = potentialMoves.matchMoves( suggestion );
 				if (applicableMoves.size() > 0)
 				{
@@ -67,7 +71,7 @@ public class Cell
 		boolean isPossible = isMovePossible( potentialMove, referenceMove );
 		if ( isPossible )
 		{
-			result = simulateMove( potentialMove );
+			result = resultOfMove( potentialMove );
 			
 			switch( result )
 			{
@@ -102,12 +106,14 @@ public class Cell
 		return result;
 	}
 
-	public TurnResult simulateMove( Move simulatedMove )
+	public TurnResult resultOfMove( Move checkedMove )
 	{
 		TurnResult result = TurnResult.NORMAL_MOVE;
-		Cell toCell = board.getCell( location.addMove( simulatedMove ) );
+		Cell toCell = board.getCell( location.addMove( checkedMove ) );
 		
-		Piece heldPiece = placePieceAt( toCell );
+		board.digSimulation();
+		
+		placePieceAt( toCell );
 		
 		if ( board.getGame().isInCheck( board.getGame().getTurnColor().getDeclaredPlayer() ) )
 		{
@@ -127,9 +133,7 @@ public class Cell
 		}
 			
 		//Rollback move
-		givePiece( toCell.takePiece() );
-		toCell.givePiece( heldPiece );
-		piece.undoMove();
+		board.rollBackSimulation();
 			
 		return result;
 	}
@@ -150,7 +154,7 @@ public class Cell
 				{
 					if (toCell.hasPiece())
 					{
-						if (toCell.getPiece().getColor() != piece.getColor())
+						if (toCell.getPiece().getColor() != getPiece().getColor())
 						{
 							result = true;
 						}
@@ -176,7 +180,7 @@ public class Cell
 		
 		if (evaluating.hasCase( MoveCase.ON_PIECE_FIRST_MOVE ) )
 		{
-			if (piece.getNumberOfMoves() > 0)
+			if (getPiece().getNumberOfMoves() > 0)
 			{
 				result = false;
 			}
@@ -246,9 +250,9 @@ public class Cell
 	{
 		ArrayList<Move> result = new ArrayList<Move>();
 		
-		if (piece != null)
+		if (getPiece() != null)
 		{
-			Move[] moves = piece.getMoveSetByColor().getExpandedTypeMoves();
+			Move[] moves = getPiece().getMoveSetByColor().getExpandedTypeMoves();
 			
 			for( Move move : moves )
 			{
@@ -286,37 +290,68 @@ public class Cell
 	{
 		Piece heldPiece = null;
 		
-		piece.move();
+		getPiece().move();
 		if ( adjustedCell.hasPiece() )
 		{
 			heldPiece = adjustedCell.takePiece();
 		}
-		adjustedCell.givePiece( piece );
-		piece = null;
+		adjustedCell.givePiece( getPiece() );
+		
+		setPiece(null);
+		
+		if (viewEquivalent != null)
+			viewEquivalent.repaint();
 		
 		return heldPiece;
 	}
 
 	public void givePiece( Piece piece )
 	{
-		this.piece = piece;
+		setPiece(piece);
+		
+		if (viewEquivalent != null)
+			viewEquivalent.repaint();
 	}
 	
 	public Piece takePiece()
 	{
-		Piece heldPiece = piece;
-		piece = null;
+		Piece heldPiece = getPiece();
+		setPiece(null);
+		
+		if (viewEquivalent != null)
+			viewEquivalent.repaint();
+		
 		return heldPiece;
+	}
+	
+	public void setViewEquivalent( CellPanel viewEquivalent )
+	{
+		this.viewEquivalent = viewEquivalent;
 	}
 	
 	public boolean hasPiece()
 	{
-		return (piece != null);
+		return (getPiece() != null);
+	}
+	
+	public boolean hasActualPiece()
+	{
+		return (getActualPiece() != null);
+	}
+
+	private void setPiece( Piece piece )
+	{
+		pieceLevels.set( board.getSimulationLevel(), piece );
+	}
+	
+	public Piece getActualPiece()
+	{
+		return pieceLevels.get(0);
 	}
 	
 	public Piece getPiece()
 	{
-		return piece;
+		return pieceLevels.get( board.getSimulationLevel() );
 	}
 	
 	public Location getLocation()
@@ -326,7 +361,7 @@ public class Cell
 	
 	public String toString()
 	{
-		String pieceString = (piece != null) ? piece.toString() : "  ";
+		String pieceString = (getPiece() != null) ? getPiece().toString() : "  ";
 		return pieceString + location;
 	}
 
@@ -335,23 +370,38 @@ public class Cell
 	{
 		boolean result = false;
 		ArrayList<Move> moves = getPossibleMoves();
-		Player controllingPlayer = piece.getColor().getDeclaredPlayer();
+		Player controllingPlayer = getPiece().getColor().getDeclaredPlayer();
+	
 		
 		for(Move move : moves)
 		{
 			if (!result)
 			{
 				Cell toCell = board.getCell( location.addMove( move ) );
-				Piece heldPiece = placePieceAt( toCell );
+				
+				board.digSimulation();
+				
+				placePieceAt( toCell );
 				
 				result = !board.getGame().isInCheck( controllingPlayer );
 				
 				//Rollback
-				givePiece( toCell.takePiece() );
-				toCell.givePiece( heldPiece );
-				piece.undoMove();
+				board.rollBackSimulation();
 			}
 		}
 		return result;
+	}
+
+
+	public void mirrorForSimulation()
+	{
+		if ( pieceLevels.size() <= board.getSimulationLevel() )
+		{
+			pieceLevels.add( pieceLevels.get( pieceLevels.size() - 1 ) );
+		}
+		else
+		{
+			pieceLevels.set( board.getSimulationLevel(), pieceLevels.get( board.getSimulationLevel() - 1 ) );
+		}
 	}
 }

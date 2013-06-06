@@ -21,6 +21,7 @@ public class CellPanel extends JPanel
 	public CellPanel( Cell cell )
 	{
 		this.cell = cell;
+		cell.setViewEquivalent( this );
 		setLayout( new BorderLayout() );
 		unhighlight();
 	}
@@ -31,9 +32,9 @@ public class CellPanel extends JPanel
 		super.paintComponent( g );
 		g.setColor( Color.BLACK );
 		g.drawRect( 0 , 0 , getWidth()-1, getHeight()-1 );
-		if (cell.hasPiece() )
+		if (cell.hasActualPiece() )
 		{
-			BufferedImage pieceImage = cell.getPiece().getImage();
+			BufferedImage pieceImage = cell.getActualPiece().getImage();
 			drawImageWithAspect( g, pieceImage, new IntegerRectangle( 0, 0, getWidth(), getHeight() ) );
 		}
 	}
