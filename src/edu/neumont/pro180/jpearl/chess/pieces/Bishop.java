@@ -11,13 +11,7 @@ public class Bishop extends Piece
 {
 	public Bishop( PieceColor color )
 	{
-		super( color );
-	}
-
-	@Override
-	public char getCharacterRepresentation()
-	{
-		return 'b';
+		super( color, 'b', 6 );
 	}
 
 	@Override

@@ -10,11 +10,11 @@ import java.util.Random;
 
 import edu.neumont.pro180.jpearl.chess.pieces.PieceColor;
 
-public class RandomAIPlayer extends Player
+public class SmartAIPlayer extends Player
 {
 	private Random rand;
 	
-	public RandomAIPlayer( PieceColor commandingColor, ChessGame game )
+	public SmartAIPlayer( PieceColor commandingColor, ChessGame game )
 	{
 		super( commandingColor, game );
 		
@@ -26,9 +26,11 @@ public class RandomAIPlayer extends Player
 	public void takeTurn()
 	{
 		ArrayList<Action> allActions = getGame().getAllActions( getCommandingColor() );
-		Action actionToTake = allActions.get( rand.nextInt( allActions.size() ) );
 		
-		actionToTake.perform();
+		Collections.sort( allActions );
+		Action topAction = allActions.get( 0 );
+		
+		topAction.perform();
 		try
 		{
 			Thread.sleep(1500);
@@ -38,8 +40,7 @@ public class RandomAIPlayer extends Player
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		Collections.sort( allActions );
-//		Action topAction = allActions.get( 0 );
+
 	}
 
 }

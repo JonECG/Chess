@@ -14,9 +14,14 @@ public abstract class Piece
 	private PieceColor color;
 	private BufferedImage image;
 	private int numberOfMoves;
+	private char characterRepresentation;
+	private int unitWorth;
 	
- 	public Piece( PieceColor color )
+ 	public Piece( PieceColor color, char characterRepresentation, int unitWorth )
 	{
+ 		this.characterRepresentation = characterRepresentation;
+ 		this.unitWorth = unitWorth;
+ 		
  		numberOfMoves = 0;
 		this.color = color;
 		
@@ -49,7 +54,15 @@ public abstract class Piece
 		return result;	
 	}
 	
-	public abstract char getCharacterRepresentation();
+	public char getCharacterRepresentation()
+	{
+		return characterRepresentation;
+	}
+	
+	public int getUnitWorth()
+	{
+		return unitWorth;
+	}
 	
 	public PieceColor getColor()
 	{

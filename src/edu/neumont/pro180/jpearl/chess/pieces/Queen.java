@@ -11,15 +11,8 @@ public class Queen extends Piece
 {
 	public Queen( PieceColor color )
 	{
-		super( color );
+		super( color, 'q', 18 );
 	}
-
-	@Override
-	public char getCharacterRepresentation()
-	{
-		return 'q';
-	}
-
 	@Override
 	public MoveSet getMoveSet()
 	{

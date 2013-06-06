@@ -11,17 +11,19 @@ public class Action implements Comparable<Action>
 {
 	private Cell originCell;
 	private Move move;
+	private Cell otherCell;
 	
-	public Action( Cell originCell, Move move )
+	public Action( Cell originCell, Move move, Cell otherCell )
 	{
 		this.originCell = originCell;
 		this.move = move;
+		this.otherCell = otherCell;
 	}
 
 	@Override
 	public int compareTo( Action other )
 	{
-		return getValue() - other.getValue();
+		return other.getValue() - getValue();
 	}
 	
 	public void perform()
@@ -31,6 +33,8 @@ public class Action implements Comparable<Action>
 	
 	public int getValue()
 	{
-		return 4;
+		//Cell otherCell = board.getCell( originCell.getLocation().addMove( move ) );
+		int otherCellValue = otherCell.hasPiece() ? otherCell.getPiece().getUnitWorth() : 0;
+		return otherCellValue - originCell.getPiece().getUnitWorth()/2;
 	}
 }

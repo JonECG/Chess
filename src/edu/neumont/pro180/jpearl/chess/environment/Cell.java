@@ -67,75 +67,73 @@ public class Cell
 		boolean isPossible = isMovePossible( potentialMove, referenceMove );
 		if ( isPossible )
 		{
-			Piece heldPiece = placePieceAt( toCell );
+			result = simulateMove( potentialMove );
 			
-			if ( board.getGame().isInCheck( board.getGame().getTurnColor().getDeclaredPlayer() ) )
+			switch( result )
 			{
+			case NORMAL_MOVE:
+				break;
+			case SELF_CHECK:
 				//System.out.println( "Your move has left yourself in check" );
 				//System.out.println( "Your move will be undone." );
-				result = TurnResult.SELF_CHECK;
 				isPossible = false;
-			}
-			else
-			if ( board.getGame().isInCheck( board.getGame().getTurnColor().getOpposing().getDeclaredPlayer() ) )
-			{
-				if ( board.getGame().isInCheckMate( board.getGame().getTurnColor().getOpposing().getDeclaredPlayer() ) )
-				{
-					//System.out.println( "You have left your opponent in checkmate. You win!" );
-					result = TurnResult.OPPONENT_CHECKMATE;
-				}
-				else
-				{
-					//System.out.println( "You have left your opponent in check" );
-					result = TurnResult.OPPONENT_CHECK;
-				}
+				break;
+			case OPPONENT_CHECK:
+				//System.out.println( "You have left your opponent in check" );
+				break;
+			case OPPONENT_CHECKMATE:
+				//System.out.println( "You have left your opponent in checkmate. You win!" );
+				break;
+			case NO_MOVE_MADE:
+				//Impossible
+				break;
 			}
 			
 			if (isPossible)
-			{
-				if (result == TurnResult.NO_MOVE_MADE)
-				{
-					result = TurnResult.NORMAL_MOVE;
-				}
-				
+			{	
+				placePieceAt( toCell );
 				char append = ( potentialMove.getType() == MoveType.CAPTURE ? '*' : ' ' );
 				System.out.println( String.format("%s %s%c", location.toString(), location.addMove( referenceMove ).toString(), append ) );
 				
 				board.getGame().giveNextPlayerControl();
 			}
-			else
-			{
-				//Rollback move
-				givePiece( toCell.takePiece() );
-				toCell.givePiece( heldPiece );
-				piece.undoMove();
-			}
-			
-			
 		}
 		
+		return result;
+	}
+
+	public TurnResult simulateMove( Move simulatedMove )
+	{
+		TurnResult result = TurnResult.NORMAL_MOVE;
+		Cell toCell = board.getCell( location.addMove( simulatedMove ) );
+		
+		Piece heldPiece = placePieceAt( toCell );
+		
+		if ( board.getGame().isInCheck( board.getGame().getTurnColor().getDeclaredPlayer() ) )
+		{
+			result = TurnResult.SELF_CHECK;
+		}
+		else
+		if ( board.getGame().isInCheck( board.getGame().getTurnColor().getOpposing().getDeclaredPlayer() ) )
+		{
+			if ( board.getGame().isInCheckMate( board.getGame().getTurnColor().getOpposing().getDeclaredPlayer() ) )
+			{
+				result = TurnResult.OPPONENT_CHECKMATE;
+			}
+			else
+			{
+				result = TurnResult.OPPONENT_CHECK;
+			}
+		}
+			
+		//Rollback move
+		givePiece( toCell.takePiece() );
+		toCell.givePiece( heldPiece );
+		piece.undoMove();
+			
 		return result;
 	}
 	
-	//Returns whether a move is possible
-	public boolean isMoveValid( Move potentialMove )
-	{
-		boolean result = false;
-		
-		MoveSet potentialMoves = piece.getMoveSetByColor();
-		ArrayList<Move> applicableMoves = potentialMoves.matchMoves( potentialMove );
-
-		for( Move move : applicableMoves )
-		{
-			if( !result )
-			{
-				result = isMovePossible( potentialMove, move );
-			}
-		}
-		
-		return result;
-	}
-		
 	//Returns whether a move is possible
 	private boolean isMovePossible( Move potentialMove, Move referenceMove )
 	{

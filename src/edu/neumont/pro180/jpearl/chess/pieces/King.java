@@ -12,14 +12,8 @@ public class King extends Piece
 {
 	public King( PieceColor color )
 	{
-		super( color );
+		super( color, 'k', 36 );
 		color.getDeclaredPlayer().setVitalPiece( this );
-	}
-
-	@Override
-	public char getCharacterRepresentation()
-	{
-		return 'k';
 	}
 	
 	@Override

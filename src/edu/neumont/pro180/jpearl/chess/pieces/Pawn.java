@@ -12,13 +12,7 @@ public class Pawn extends Piece
 {
 	public Pawn( PieceColor color )
 	{
-		super( color );
-	}
-
-	@Override
-	public char getCharacterRepresentation()
-	{
-		return 'p';
+		super( color, 'p', 2 );
 	}
 	
 	@Override

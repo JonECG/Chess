@@ -11,15 +11,9 @@ public class Rook extends Piece
 {
 	public Rook( PieceColor color )
 	{
-		super( color );
+		super( color, 'r', 10 );
 	}
-
-	@Override
-	public char getCharacterRepresentation()
-	{
-		return 'r';
-	}
-
+	
 	@Override
 	public MoveSet getMoveSet()
 	{

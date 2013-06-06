@@ -11,13 +11,7 @@ public class Knight extends Piece
 {
 	public Knight( PieceColor color )
 	{
-		super( color );
-	}
-
-	@Override
-	public char getCharacterRepresentation()
-	{
-		return 'n';
+		super( color, 'n', 6 );
 	}
 	
 	@Override

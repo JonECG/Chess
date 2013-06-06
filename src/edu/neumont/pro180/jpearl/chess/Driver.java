@@ -24,13 +24,14 @@ public class Driver
 	{		
 		String path = (args.length == 1) ? args[0] : PATH;
 		
-		ChessGame game = new ChessGame();
 		
 		JFrame frame = new JFrame( "Chess and things" );
 		
 		Dimension preferred = new Dimension( DEFAULT_SIZE,DEFAULT_SIZE );
 		frame.setPreferredSize( preferred );
 
+		ChessGame game = new ChessGame( frame );
+		
         //TODO: Prompt for player types
         Object[] options = { "Random AI", "Smart AI", "Human" };
         JOptionPane gameTypeOptionPane = new JOptionPane( "Choose a game type", JOptionPane.DEFAULT_OPTION, JOptionPane.DEFAULT_OPTION, null, options, options[0] );
@@ -43,7 +44,8 @@ public class Driver
             game.addNewPlayer( new RandomAIPlayer( PieceColor.DARK, game ) );
         }
         if(selected.equals( options[1]) ){
-            // smart ai
+        	game.addNewPlayer( new SmartAIPlayer( PieceColor.LIGHT, game ) );
+            game.addNewPlayer( new RandomAIPlayer( PieceColor.DARK, game ) );
         }
         if(selected.equals( options[2]) ){
             game.addNewPlayer( new HumanPlayer( PieceColor.LIGHT, game ) );
