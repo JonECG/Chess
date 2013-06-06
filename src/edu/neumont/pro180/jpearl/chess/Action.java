@@ -4,8 +4,11 @@
  */
 package edu.neumont.pro180.jpearl.chess;
 
+import java.util.ArrayList;
+
 import edu.neumont.pro180.jpearl.chess.environment.Cell;
 import edu.neumont.pro180.jpearl.chess.pieces.Move;
+import edu.neumont.pro180.jpearl.chess.pieces.PieceColor;
 
 public class Action implements Comparable<Action>
 {
@@ -34,7 +37,19 @@ public class Action implements Comparable<Action>
 	public int getValue()
 	{
 		//Cell otherCell = board.getCell( originCell.getLocation().addMove( move ) );
+		return recurseForValue( 0, originCell.getBoard().getGame().getTurnColor() );
+	}
+	
+	public int recurseForValue( int recurseLevel, PieceColor favor )
+	{
 		int otherCellValue = otherCell.hasPiece() ? otherCell.getPiece().getUnitWorth() : 0;
-		return otherCellValue - originCell.getPiece().getUnitWorth()/2;
+		int result = otherCellValue - originCell.getPiece().getUnitWorth()/2;
+		
+		if (recurseLevel > 0)
+		{
+			ArrayList<Cell> cells = originCell.getBoard().getAllCellsWithPiece( originCell.getBoard().getGame().getTurnColor() );
+		}
+		
+		return result;
 	}
 }

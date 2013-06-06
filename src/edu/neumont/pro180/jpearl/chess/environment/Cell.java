@@ -404,4 +404,10 @@ public class Cell
 			pieceLevels.set( board.getSimulationLevel(), pieceLevels.get( board.getSimulationLevel() - 1 ) );
 		}
 	}
+
+
+	public ChessBoard getBoard()
+	{
+		return board;
+	}
 }
