@@ -19,6 +19,7 @@ public class Action implements Comparable<Action>
 	private Cell originCell;
 	private Move move;
 	private Cell otherCell;
+	private static final int SECONDS_TO_CALCULATE = 1;
 	
 	public Action( Cell originCell, Move move, Cell otherCell )
 	{
@@ -41,32 +42,33 @@ public class Action implements Comparable<Action>
 	public int getValue()
 	{
 		//Cell otherCell = board.getCell( originCell.getLocation().addMove( move ) );
-
+		
         PieceColor startColor = originCell.getBoard().getGame().getTurnColor();
-        int result = recurseForValue( 2, originCell.getBoard().getGame().getTurnColor() );
+        int result = recurseForValue( 3, originCell.getBoard().getGame().getTurnColor(), System.currentTimeMillis() );
         if(startColor !=  originCell.getBoard().getGame().getTurnColor())
             originCell.getBoard().getGame().giveNextPlayerControl();
 		return result;
 	}
 	
-	public int recurseForValue( int recurseLevel, PieceColor favor )
+	public int recurseForValue( int recurseLevel, PieceColor favor, long startTime )
 	{
 		int otherCellValue = otherCell.hasPiece() ? otherCell.getPiece().getUnitWorth() : 0;
-		int result = otherCellValue - originCell.getPiece().getUnitWorth()/2;
+		int result = otherCellValue;// - originCell.getPiece().getUnitWorth()/2;
 		
-		if (recurseLevel > 0)
+		if (recurseLevel > 0 && startTime > ( System.currentTimeMillis() - SECONDS_TO_CALCULATE*10000 ) )
 		{
             originCell.getBoard().digSimulation();
             originCell.getBoard().getGame().giveNextPlayerControl();
-            ArrayList<Cell> cells = originCell.getBoard().getAllCellsWithPiece( originCell.getBoard().getGame().getTurnColor() );
-            for (Cell cell : cells) {
-                ArrayList<Action> allActions = originCell.getBoard().getGame().getAllActions( originCell.getBoard().getGame().getTurnColor() );
-                for( Action action : allActions){
-                    if ( originCell.getBoard().getGame().getTurnColor() == favor )
-                        result += action.recurseForValue(recurseLevel -1, favor);
-                    else
-                        result -= action.recurseForValue(recurseLevel -1, favor);
-                }
+            ArrayList<Action> allActions = originCell.getBoard().getGame().getAllActions( originCell.getBoard().getGame().getTurnColor() );
+            for( Action action : allActions)
+            {
+            	if (startTime > ( System.currentTimeMillis() - SECONDS_TO_CALCULATE*1000 ))
+            	{
+	                if ( originCell.getBoard().getGame().getTurnColor() == favor )
+	                    result += action.recurseForValue(recurseLevel -1, favor, startTime);
+	                else
+	                    result -= action.recurseForValue(recurseLevel -1, favor, startTime);
+            	}
             }
             originCell.getBoard().rollBackSimulation();
         }

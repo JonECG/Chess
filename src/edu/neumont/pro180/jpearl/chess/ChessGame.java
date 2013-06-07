@@ -6,8 +6,6 @@ package edu.neumont.pro180.jpearl.chess;
 
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-
 import edu.neumont.pro180.jpearl.chess.environment.Cell;
 import edu.neumont.pro180.jpearl.chess.environment.Cell.TurnResult;
 import edu.neumont.pro180.jpearl.chess.environment.ChessBoard;
@@ -22,11 +20,9 @@ public class ChessGame
 	private Player[] playerRoster;
 	private int playerTurnIndex;
 	private ChessBoard board;
-	private JFrame display;
 	
-	public ChessGame( JFrame display, Player...players )
+	public ChessGame( Player...players )
 	{
-		this.display = display;
 		playerRoster = players;
 		playerTurnIndex = 0;
 		board = new ChessBoard( this );
@@ -38,9 +34,6 @@ public class ChessGame
 		{
 			System.out.println(getCurrentPlayerTurn().getCommandingColor());
 			getCurrentPlayerTurn().takeTurn();
-			//display.repaint( 0 );
-			//display.repaint();
-			//giveNextPlayerControl();
 		}
 	}
 	

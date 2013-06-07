@@ -30,7 +30,7 @@ public class Driver
 		Dimension preferred = new Dimension( DEFAULT_SIZE,DEFAULT_SIZE );
 		frame.setPreferredSize( preferred );
 
-		ChessGame game = new ChessGame( frame );
+		ChessGame game = new ChessGame();
 		
         //TODO: Prompt for player types
         Object[] options = { "Random AI", "Smart AI", "Human" };
