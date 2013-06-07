@@ -6,12 +6,14 @@ package edu.neumont.pro180.jpearl.chess;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
 import edu.neumont.pro180.jpearl.chess.environment.Cell;
 import edu.neumont.pro180.jpearl.chess.pieces.Move;
 import edu.neumont.pro180.jpearl.chess.pieces.MoveSet;
+import edu.neumont.pro180.jpearl.chess.pieces.Piece;
 import edu.neumont.pro180.jpearl.chess.pieces.PieceColor;
 
 public class Action implements Comparable<Action>
@@ -19,7 +21,8 @@ public class Action implements Comparable<Action>
 	private Cell originCell;
 	private Move move;
 	private Cell otherCell;
-	private static final int SECONDS_TO_CALCULATE = 1;
+	private static final int MS_TO_CALCULATE = 10000;
+	private static final double TOP_PERCENT_TO_EVALUATE = 1;
 	
 	public Action( Cell originCell, Move move, Cell otherCell )
 	{
@@ -28,52 +31,64 @@ public class Action implements Comparable<Action>
 		this.otherCell = otherCell;
 	}
 
-	@Override
-	public int compareTo( Action other )
-	{
-		return other.getValue() - getValue();
-	}
 	
 	public void perform()
 	{
 		originCell.suggestMove( move );
 	}
 	
-	public int getValue()
+	public double getValue()
 	{
-		//Cell otherCell = board.getCell( originCell.getLocation().addMove( move ) );
-		
-        PieceColor startColor = originCell.getBoard().getGame().getTurnColor();
-        int result = recurseForValue( 3, originCell.getBoard().getGame().getTurnColor(), System.currentTimeMillis() );
-        if(startColor !=  originCell.getBoard().getGame().getTurnColor())
-            originCell.getBoard().getGame().giveNextPlayerControl();
+        double result = recurseForValue( 4, originCell.getBoard().getGame().getTurnColor(), System.currentTimeMillis() );
 		return result;
 	}
 	
-	public int recurseForValue( int recurseLevel, PieceColor favor, long startTime )
+	public double recurseForValue( int recurseLevel, PieceColor favor, long startTime )
 	{
 		int otherCellValue = otherCell.hasPiece() ? otherCell.getPiece().getUnitWorth() : 0;
-		int result = otherCellValue;// - originCell.getPiece().getUnitWorth()/2;
+		double result = ( originCell.getBoard().getGame().getTurnColor() == favor ) ? otherCellValue : -otherCellValue*1.05;// - originCell.getPiece().getUnitWorth()/2;
 		
-		if (recurseLevel > 0 && startTime > ( System.currentTimeMillis() - SECONDS_TO_CALCULATE*10000 ) )
+		if (recurseLevel > 0 && (startTime > ( System.currentTimeMillis() - MS_TO_CALCULATE ) ) )
 		{
             originCell.getBoard().digSimulation();
-            originCell.getBoard().getGame().giveNextPlayerControl();
+            Piece pieceHold = originCell.getPiece();
+            perform();
             ArrayList<Action> allActions = originCell.getBoard().getGame().getAllActions( originCell.getBoard().getGame().getTurnColor() );
+            
+            Collections.sort( allActions );
+            int numberEvaluated = 0;
+            int numberToEvaluate = (int) (allActions.size() * TOP_PERCENT_TO_EVALUATE);
+            
+            double runningTotal = 0;
             for( Action action : allActions)
             {
-            	if (startTime > ( System.currentTimeMillis() - SECONDS_TO_CALCULATE*1000 ))
+            	if ( numberEvaluated < numberToEvaluate && startTime > ( System.currentTimeMillis() - MS_TO_CALCULATE ))
             	{
-	                if ( originCell.getBoard().getGame().getTurnColor() == favor )
-	                    result += action.recurseForValue(recurseLevel -1, favor, startTime);
-	                else
-	                    result -= action.recurseForValue(recurseLevel -1, favor, startTime);
+	                runningTotal += action.recurseForValue(recurseLevel -1, favor, startTime)*.95;
             	}
+            	numberEvaluated++;
             }
+            result += runningTotal / allActions.size();
+            
+            pieceHold.undoMove();
             originCell.getBoard().rollBackSimulation();
         }
 		
 		return result;
+	}
+
+
+
+	public int getImmediateValue()
+	{
+		return otherCell.hasPiece() ? otherCell.getPiece().getUnitWorth() : 0;
+	}
+
+
+	@Override
+	public int compareTo( Action other )
+	{
+		return other.getImmediateValue() - getImmediateValue();
 	}
 
 }

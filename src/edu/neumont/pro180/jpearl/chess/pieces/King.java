@@ -12,7 +12,7 @@ public class King extends Piece
 {
 	public King( PieceColor color )
 	{
-		super( color, 'k', 36 );
+		super( color, 'k', 2000000 );
 		color.getDeclaredPlayer().setVitalPiece( this );
 	}
 	

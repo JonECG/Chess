@@ -18,10 +18,13 @@ public class ChessBoard
 	public static final int BOARD_SIZE = 8;
 	private ChessGame game;
 	private int simulationLayer;
+	private ArrayList<PieceColor> turnLevels;
 	
 	//Create the board and initiate the cells inside it
 	public ChessBoard(ChessGame game)
 	{
+		turnLevels = new ArrayList<PieceColor>();
+		turnLevels.add( null );
 		simulationLayer = 0;
 		board = new HashMap<Location,Cell>();
 		for( int i = 0; i < BOARD_SIZE; i++ )
@@ -100,6 +103,7 @@ public class ChessBoard
 	{
 		simulationLayer += 1;
 		
+		//Percolates a layer down
 		for( int i = 0; i < BOARD_SIZE; i++ )
 		{
 			for( int j = 0; j < BOARD_SIZE; j++ )
@@ -108,11 +112,28 @@ public class ChessBoard
 				cell.mirrorForSimulation();
 			}
 		}
+		
+		mirrorTurnForSimulation();
 	}
 	
 	public void rollBackSimulation()
 	{
+		if ( turnLevels.get( simulationLayer ) != game.getTurnColor() )
+			game.giveNextPlayerControl();
+		
 		simulationLayer -= 1;
+	}
+	
+	private void mirrorTurnForSimulation()
+	{
+		if ( turnLevels.size() <= getSimulationLevel() )
+		{
+			turnLevels.add( game.getTurnColor() );
+		}
+		else
+		{
+			turnLevels.set( getSimulationLevel(), game.getTurnColor() );
+		}
 	}
 	
 	public int getSimulationLevel()

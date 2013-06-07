@@ -27,11 +27,12 @@ public class RandomAIPlayer extends Player
 	{
 		ArrayList<Action> allActions = getGame().getAllActions( getCommandingColor() );
 		Action actionToTake = allActions.get( rand.nextInt( allActions.size() ) );
-		
-		actionToTake.perform();
+
 		try
 		{
-			Thread.sleep(100);
+			Thread.sleep(1000);
+			actionToTake.perform();
+			Thread.sleep(1000);
 		}
 		catch ( InterruptedException e )
 		{

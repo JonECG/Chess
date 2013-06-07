@@ -96,8 +96,12 @@ public class Cell
 			if (isPossible)
 			{	
 				placePieceAt( toCell );
-				char append = ( potentialMove.getType() == MoveType.CAPTURE ? '*' : ' ' );
-				System.out.println( String.format("%s %s%c", location.toString(), location.addMove( referenceMove ).toString(), append ) );
+				
+				if (board.getSimulationLevel() == 0)
+				{
+					char append = ( potentialMove.getType() == MoveType.CAPTURE ? '*' : ' ' );
+					System.out.println( String.format("%s %s%c", location.toString(), location.addMove( referenceMove ).toString(), append ) );
+				}
 				
 				board.getGame().giveNextPlayerControl();
 			}
@@ -114,6 +118,7 @@ public class Cell
 		board.digSimulation();
 		
 		placePieceAt( toCell );
+		toCell.getPiece().undoMove();
 		
 		if ( board.getGame().isInCheck( board.getGame().getTurnColor().getDeclaredPlayer() ) )
 		{
