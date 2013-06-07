@@ -33,7 +33,7 @@ public class Driver
 		ChessGame game = new ChessGame();
 		
         //TODO: Prompt for player types
-        Object[] options = { "Random AI", "Smart AI", "Human" };
+        Object[] options = { "Random AI", "Smart AI", "Human", "Tournament" };
         JOptionPane gameTypeOptionPane = new JOptionPane( "Choose a game type", JOptionPane.DEFAULT_OPTION, JOptionPane.DEFAULT_OPTION, null, options, options[0] );
         JDialog gameTypeDialog = gameTypeOptionPane.createDialog( null, "Chess and things" );
         gameTypeDialog.setVisible( true );
@@ -50,6 +50,9 @@ public class Driver
         if(selected.equals( options[2]) ){
             game.addNewPlayer( new HumanPlayer( PieceColor.LIGHT, game ) );
             game.addNewPlayer( new HumanPlayer( PieceColor.DARK, game ) );
+        }
+        if(selected.equals( options[3] )){
+            Tournament tournament = new Tournament( game );
         }
 		
 		
