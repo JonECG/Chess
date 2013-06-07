@@ -39,14 +39,14 @@ public class Action implements Comparable<Action>
 	
 	public double getValue()
 	{
-        double result = recurseForValue( 4, originCell.getBoard().getGame().getTurnColor(), System.currentTimeMillis() );
+        double result = recurseForValue( 3, originCell.getBoard().getGame().getTurnColor(), System.currentTimeMillis() );
 		return result;
 	}
 	
 	public double recurseForValue( int recurseLevel, PieceColor favor, long startTime )
 	{
 		int otherCellValue = otherCell.hasPiece() ? otherCell.getPiece().getUnitWorth() : 0;
-		double result = ( originCell.getBoard().getGame().getTurnColor() == favor ) ? otherCellValue : -otherCellValue*1.05;// - originCell.getPiece().getUnitWorth()/2;
+		double result = ( originCell.getBoard().getGame().getTurnColor() == favor ) ? otherCellValue : -otherCellValue*1.01;// - originCell.getPiece().getUnitWorth()/2;
 		
 		if (recurseLevel > 0 && (startTime > ( System.currentTimeMillis() - MS_TO_CALCULATE ) ) )
 		{
@@ -64,7 +64,7 @@ public class Action implements Comparable<Action>
             {
             	if ( numberEvaluated < numberToEvaluate && startTime > ( System.currentTimeMillis() - MS_TO_CALCULATE ))
             	{
-	                runningTotal += action.recurseForValue(recurseLevel -1, favor, startTime)*.95;
+	                runningTotal += action.recurseForValue(recurseLevel -1, favor, startTime)*.99;
             	}
             	numberEvaluated++;
             }
