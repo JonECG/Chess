@@ -28,13 +28,16 @@ public class ChessGame
 		board = new ChessBoard( this );
 	}
 
-	public void playGame()
+	public Player playGame()
 	{
-		while( true )
-		{
-			System.out.println(getCurrentPlayerTurn().getCommandingColor());
-			getCurrentPlayerTurn().takeTurn();
-		}
+        while(!isInCheckMate(playerRoster[0]) && !isInCheckMate(playerRoster[1]))
+        {
+            System.out.println(getCurrentPlayerTurn().getCommandingColor());
+            getCurrentPlayerTurn().takeTurn();
+        }
+        Player winner = isInCheckMate(playerRoster[0]) ? playerRoster[1] : playerRoster[0];
+        System.out.println("winner: " + winner);
+        return winner;
 	}
 	
 	//Run a bare parser against the board
