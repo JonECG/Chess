@@ -153,8 +153,9 @@ public class ChessGame
 		{
 			for( Move move : cell.getPossibleMoves() )
 			{
-				//cell.simulateMove( move );cell.simulateMove( move );cell.simulateMove( move );cell.simulateMove( move );cell.simulateMove( move );
-				if (cell.resultOfMove( move ) != TurnResult.SELF_CHECK )
+				TurnResult moveResult = cell.resultOfMove( move );
+
+				if (moveResult != TurnResult.SELF_CHECK && moveResult != TurnResult.STALEMATE)
 				{
 					result.add( new Action( cell, move, board.getCell( cell.getLocation().addMove( move ) ) ) );
 				}

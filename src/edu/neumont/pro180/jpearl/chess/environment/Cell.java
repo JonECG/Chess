@@ -21,7 +21,7 @@ public class Cell
 	private ChessBoard board;
 	private CellPanel viewEquivalent;
 	
-	public enum TurnResult{ NO_MOVE_MADE, NORMAL_MOVE, SELF_CHECK, OPPONENT_CHECK, OPPONENT_CHECKMATE };
+	public enum TurnResult{ NO_MOVE_MADE, NORMAL_MOVE, SELF_CHECK, OPPONENT_CHECK, OPPONENT_CHECKMATE, STALEMATE };
 	
 	public Cell( int x, int y, ChessBoard board )
 	{
@@ -89,6 +89,8 @@ public class Cell
 			case NO_MOVE_MADE:
 				//Impossible
 				break;
+			case STALEMATE:
+				break;
 			}
 			
 			if (isPossible)
@@ -133,6 +135,11 @@ public class Cell
 			{
 				result = TurnResult.OPPONENT_CHECK;
 			}
+		}
+		else
+		if ( board.getGame().isInCheckMate( board.getGame().getTurnColor().getOpposing().getDeclaredPlayer() ) )
+		{
+			result = TurnResult.STALEMATE;
 		}
 			
 		//Rollback move
