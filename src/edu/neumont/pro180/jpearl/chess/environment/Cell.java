@@ -7,9 +7,7 @@ package edu.neumont.pro180.jpearl.chess.environment;
 import java.util.ArrayList;
 
 import edu.neumont.pro180.jpearl.chess.Player;
-import edu.neumont.pro180.jpearl.chess.pieces.Move;
-import edu.neumont.pro180.jpearl.chess.pieces.MoveSet;
-import edu.neumont.pro180.jpearl.chess.pieces.Piece;
+import edu.neumont.pro180.jpearl.chess.pieces.*;
 import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveCase;
 import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveStyle;
 import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveType;
@@ -312,8 +310,13 @@ public class Cell
 
 	public void givePiece( Piece piece )
 	{
-		setPiece(piece);
-		
+        if( piece instanceof Pawn )
+        {
+            PieceColor color = piece.getColor();
+            if( location.getY() == 0 || location.getY() == ChessBoard.BOARD_SIZE - 1 )
+                piece = new Queen(color);
+        }
+        setPiece(piece);
 		if (viewEquivalent != null)
 			viewEquivalent.repaint();
 	}
