@@ -16,9 +16,9 @@ public abstract class Piece
 	private int numberOfMoves;
 	private int lastTurn;
 	private char characterRepresentation;
-	private int unitWorth;
+	private double unitWorth;
 	
- 	public Piece( PieceColor color, char characterRepresentation, int unitWorth )
+ 	public Piece( PieceColor color, char characterRepresentation, double unitWorth )
 	{
  		this.characterRepresentation = characterRepresentation;
  		this.unitWorth = unitWorth;
@@ -61,7 +61,7 @@ public abstract class Piece
 		return characterRepresentation;
 	}
 	
-	public int getUnitWorth()
+	public double getUnitWorth()
 	{
 		return unitWorth;
 	}

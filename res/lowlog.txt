@@ -1,16 +1,16 @@
 --DARK PIECES--
-rda8
-ndb8
-bdc8
-qdd8
+rda8-
+ndb8-
+bdc8-
+qdd8-
 kde8
-bdf8
-ndg8
-rdh8
+bdf8-
+ndg8-
+rdh8-
 pda7-
 pdb7-
 pdc7-
-pdd7-
+pdd4
 pde7-
 pdf7-
 pdg7-
@@ -26,7 +26,7 @@ nlg1-
 rlh1-
 pla2-
 plb2-
-plc2-
+plc2
 pld2-
 ple2-
 plf2-

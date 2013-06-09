@@ -24,7 +24,7 @@ public class Move
 	//once per game -- Move can only be made once per game per player (castling)
 	//in passing -- Move can only be made when a piece could take a pawn out if it had moved one space but has just moved two as its first move (en passant)
 	//mid point free -- Move can only be made if the space between the start and destination is free
-	public enum MoveCase{ ON_PIECE_FIRST_MOVE, ONCE_PER_GAME, IN_PASSING, MID_POINT_FREE };
+	public enum MoveCase{ ON_PIECE_FIRST_MOVE, CASTLING, EN_PASSANT, MID_POINT_FREE };
 	
 	private static final int NUMBER_OF_REFLECTIONS = 4;
 	

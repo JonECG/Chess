@@ -63,7 +63,7 @@ public class Action implements Comparable<Action>
 	{
 		boolean isInFavor = originCell.getBoard().getGame().getTurnColor() == favor;
 		
-		int otherCellValue = otherCell.hasPiece() ? otherCell.getPiece().getUnitWorth() : 0;
+		double otherCellValue = otherCell.hasPiece() ? otherCell.getPiece().getUnitWorth() : 0;
 		double result = ( isInFavor ) ? otherCellValue : -otherCellValue*(1+LARGE_BIAS);
 		
 		//Add Bias for moves with larger board cover and pieces that have not been used as often
@@ -78,12 +78,16 @@ public class Action implements Comparable<Action>
 				subTotal += Queen.VALUE; //Add value to moves with pawn promotion
 			}
 			
-			if ( move.hasCase( MoveCase.IN_PASSING ) ) //Consider en passant a capture of a pawn
+			if ( move.hasCase( MoveCase.EN_PASSANT ) ) //Consider en passant a capture of a pawn
 			{
 				subTotal += Pawn.VALUE;
 			}
 		}
 		
+		if ( move.hasCase( MoveCase.CASTLING ) ) //Consider castling as a positive move
+		{
+			subTotal += LARGE_BIAS;
+		}
 		
 		result += ( isInFavor ) ? subTotal : -subTotal;
 		
@@ -129,11 +133,11 @@ public class Action implements Comparable<Action>
 
 
 
-	public int getImmediateValue()
+	public double getImmediateValue()
 	{
 		int enPassantValue = 0;
 
-		if ( move.hasCase( MoveCase.IN_PASSING ) ) //Consider en passant a capture of a pawn
+		if ( move.hasCase( MoveCase.EN_PASSANT ) ) //Consider en passant a capture of a pawn
 			enPassantValue = 1;
 			
 		return otherCell.hasPiece() ? otherCell.getPiece().getUnitWorth() : enPassantValue;
@@ -143,7 +147,7 @@ public class Action implements Comparable<Action>
 	@Override
 	public int compareTo( Action other )
 	{
-		return other.getImmediateValue() - getImmediateValue();
+		return (int) other.getImmediateValue() - (int) getImmediateValue();
 	}
 
 

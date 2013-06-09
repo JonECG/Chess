@@ -11,7 +11,7 @@ import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveType;
 public class King extends Piece
 {
 	public static final char REPRESENTATION = 'k';
-	public static final int VALUE = 1000000;
+	public static final double VALUE = 1000000;
 	
 	public King( PieceColor color )
 	{
@@ -32,8 +32,8 @@ public class King extends Piece
 		{
 			allMoves[i] = regularMoves[i];
 		}
-		allMoves[ regularMoves.length ] = new Move( -2, 0, MoveType.MOVE, MoveStyle.STEP, MoveCase.ONCE_PER_GAME );
-		allMoves[ regularMoves.length + 1 ] = new Move( 2, 0, MoveType.MOVE, MoveStyle.STEP, MoveCase.ONCE_PER_GAME );
+		allMoves[ regularMoves.length ] = new Move( -2, 0, MoveType.MOVE, MoveStyle.STEP, MoveCase.CASTLING );
+		allMoves[ regularMoves.length + 1 ] = new Move( 2, 0, MoveType.MOVE, MoveStyle.STEP, MoveCase.CASTLING );
 		return new MoveSet( allMoves );
 	}
 }

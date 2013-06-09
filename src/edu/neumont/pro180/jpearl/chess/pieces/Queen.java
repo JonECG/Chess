@@ -10,7 +10,7 @@ import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveType;
 public class Queen extends Piece
 {
 	public static final char REPRESENTATION = 'q';
-	public static final int VALUE = 9;
+	public static final double VALUE = 8.8;
 	
 	public Queen( PieceColor color )
 	{

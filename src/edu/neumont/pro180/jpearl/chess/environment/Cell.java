@@ -211,7 +211,7 @@ public class Cell
 				result = false;
 			}
 		}
-		if (evaluating.hasCase( MoveCase.IN_PASSING ) )
+		if (evaluating.hasCase( MoveCase.EN_PASSANT ) )
 		{
 			boolean enPassantPossible = false;
 			int neededRank = getPiece().getColor() == PieceColor.LIGHT ? ChessBoard.BOARD_SIZE - EN_PASSANT_RANK - 1 : EN_PASSANT_RANK;
@@ -232,10 +232,31 @@ public class Cell
 			}
 			result = enPassantPossible && result;
 		}
-		if (evaluating.hasCase( MoveCase.ONCE_PER_GAME ) )
+		if (evaluating.hasCase( MoveCase.CASTLING ) )
 		{
-			//NOT IMPLEMENTED YET
-			result = false;
+			boolean castlingResult = false;
+			int neededFile = (attempt.getDeltaX() > 0) ? ChessBoard.BOARD_SIZE - 1 : 0;
+			Cell cornerCell = board.getCell( new Location( neededFile, location.getY() ) );
+			Piece shouldBeRook = cornerCell.getPiece();
+			if( shouldBeRook != null && shouldBeRook.getCharacterRepresentation() == Rook.REPRESENTATION )
+			{
+				if( getPiece().getNumberOfMoves() == 0 && shouldBeRook.getNumberOfMoves() == 0 )
+				{
+					Location pivot = new Location( location.getX() + ( (attempt.getDeltaX() > 0) ? 1 : -1 ), location.getY() );
+					if (!board.getCell( pivot ).hasPiece())
+					{
+						Move moveNeeded = Move.makeFromLocations( cornerCell.getLocation(), pivot, MoveType.MOVE );
+						if( cornerCell.isSlideUnblocked( moveNeeded, shouldBeRook.getMoveSetByColor().matchingMove( moveNeeded ) ) )
+						{
+							//if ( !board.getGame().isInCheck( getPiece().getColor().getDeclaredPlayer() ) ) //Stack Overflow :(
+							{
+								castlingResult = true;
+							}
+						}
+					}
+				}
+			}
+			result = castlingResult && result;
 		}
 		if (evaluating.hasCase( MoveCase.MID_POINT_FREE ) )
 		{
@@ -260,7 +281,7 @@ public class Cell
 	private void executeSpecialCases( Move attempt, Move reference )
 	{
 		Cell toCell = board.getCell( location.addMove( attempt ) );
-		if (reference.hasCase( MoveCase.IN_PASSING ) )
+		if (reference.hasCase( MoveCase.EN_PASSANT ) )
 		{
 			int neededRank = getPiece().getColor() == PieceColor.LIGHT ? ChessBoard.BOARD_SIZE - EN_PASSANT_RANK - 1 : EN_PASSANT_RANK;
 			
@@ -270,9 +291,12 @@ public class Cell
 				shouldHave.takePiece();
 			}
 		}
-		if (reference.hasCase( MoveCase.ONCE_PER_GAME ) )
+		if (reference.hasCase( MoveCase.CASTLING ) )
 		{
-			//NOT IMPLEMENTED YET
+			int neededFile = (attempt.getDeltaX() > 0) ? ChessBoard.BOARD_SIZE - 1 : 0;
+			Cell cornerCell = board.getCell( new Location( neededFile, location.getY() ) );
+			Location pivot = new Location( location.getX() + ( (attempt.getDeltaX() > 0) ? 1 : -1 ), location.getY() );
+			cornerCell.placePieceAt( board.getCell( pivot ) );
 		}
 	}
 	

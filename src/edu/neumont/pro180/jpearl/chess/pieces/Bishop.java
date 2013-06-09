@@ -10,7 +10,7 @@ import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveType;
 public class Bishop extends Piece
 {
 	public static final char REPRESENTATION = 'b';
-	public static final int VALUE = 3;
+	public static final double VALUE = 3.33;
 	
 	public Bishop( PieceColor color )
 	{

@@ -45,7 +45,7 @@ public class Driver
         }
         if(selected.equals( options[1]) ){
         	game.addNewPlayer( new SmartAIPlayer( PieceColor.LIGHT, game, 2 ) );
-            game.addNewPlayer( new HumanPlayer( PieceColor.DARK, game ) );
+            game.addNewPlayer( new SmartAIPlayer( PieceColor.DARK, game, 2 ) );
         }
         if(selected.equals( options[2]) ){
             game.addNewPlayer( new HumanPlayer( PieceColor.LIGHT, game ) );

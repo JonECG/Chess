@@ -11,7 +11,7 @@ import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveType;
 public class Pawn extends Piece
 {
 	public static final char REPRESENTATION = 'p';
-	public static final int VALUE = 1;
+	public static final double VALUE = 1;
 	
 	public Pawn( PieceColor color )
 	{
@@ -25,8 +25,8 @@ public class Pawn extends Piece
 				new Move( 1, 1, MoveType.CAPTURE, MoveStyle.STEP ),
 				new Move( -1, 1, MoveType.CAPTURE, MoveStyle.STEP ),
 				new Move( 0, 2, MoveType.MOVE, MoveStyle.STEP, MoveCase.ON_PIECE_FIRST_MOVE, MoveCase.MID_POINT_FREE ),
-				new Move( 1, 1, MoveType.MOVE, MoveStyle.STEP, MoveCase.IN_PASSING ),
-				new Move( -1, 1, MoveType.MOVE, MoveStyle.STEP, MoveCase.IN_PASSING )
+				new Move( 1, 1, MoveType.MOVE, MoveStyle.STEP, MoveCase.EN_PASSANT ),
+				new Move( -1, 1, MoveType.MOVE, MoveStyle.STEP, MoveCase.EN_PASSANT )
 			};
 		return new MoveSet( baseMoves );
 	}
