@@ -9,9 +9,12 @@ import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveType;
 
 public class Bishop extends Piece
 {
+	public static final char REPRESENTATION = 'b';
+	public static final int VALUE = 3;
+	
 	public Bishop( PieceColor color )
 	{
-		super( color, 'b', 6 );
+		super( color, REPRESENTATION, VALUE );
 	}
 
 	@Override

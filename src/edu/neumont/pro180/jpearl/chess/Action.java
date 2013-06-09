@@ -11,11 +11,15 @@ import java.util.HashSet;
 import java.util.List;
 
 import edu.neumont.pro180.jpearl.chess.environment.Cell;
+import edu.neumont.pro180.jpearl.chess.environment.ChessBoard;
 import edu.neumont.pro180.jpearl.chess.environment.Cell.TurnResult;
+import edu.neumont.pro180.jpearl.chess.pieces.King;
 import edu.neumont.pro180.jpearl.chess.pieces.Move;
 import edu.neumont.pro180.jpearl.chess.pieces.MoveSet;
+import edu.neumont.pro180.jpearl.chess.pieces.Pawn;
 import edu.neumont.pro180.jpearl.chess.pieces.Piece;
 import edu.neumont.pro180.jpearl.chess.pieces.PieceColor;
+import edu.neumont.pro180.jpearl.chess.pieces.Queen;
 
 public class Action implements Comparable<Action>
 {
@@ -23,8 +27,11 @@ public class Action implements Comparable<Action>
 	private Move move;
 	private Cell otherCell;
 	private TurnResult moveResult;
-	private static final int MS_TO_CALCULATE = 100000;
-	private static final double TOP_PERCENT_TO_EVALUATE = 1;
+	
+	private static final double SLIGHT_BIAS = 0.00001;
+	private static final double SMALL_BIAS = 0.0001;
+	private static final double MEDIUM_BIAS = 0.001;
+	private static final double LARGE_BIAS = 0.01;
 	
 	public Action( Cell originCell, Move move, Cell otherCell, TurnResult moveResult )
 	{
@@ -56,47 +63,55 @@ public class Action implements Comparable<Action>
 		boolean isInFavor = originCell.getBoard().getGame().getTurnColor() == favor;
 		
 		int otherCellValue = otherCell.hasPiece() ? otherCell.getPiece().getUnitWorth() : 0;
-		double result = ( isInFavor ) ? otherCellValue : -otherCellValue*1.02;
+		double result = ( isInFavor ) ? otherCellValue : -otherCellValue*(1+LARGE_BIAS);
 		
-		double subTotal = move.getLength()*.0001 - originCell.getPiece().getNumberOfMoves()*.001;
+		//Add Bias for moves with larger board cover and pieces that have not been used as often
+		double subTotal = move.getLength()*SMALL_BIAS - originCell.getPiece().getNumberOfMoves()*LARGE_BIAS;
+		
+		if( originCell.getPiece().getCharacterRepresentation() == Pawn.REPRESENTATION )
+		{
+			subTotal += SLIGHT_BIAS; //Bias to move pawns if no move is available
+			
+			if( otherCell.getLocation().getY() == 0 || otherCell.getLocation().getY() == ChessBoard.BOARD_SIZE-1 )
+			{
+				subTotal += Queen.VALUE; //Add value to moves with pawn promotion
+			}
+		}
 		result += ( isInFavor ) ? subTotal : -subTotal;
 		
 		if( moveResult == TurnResult.OPPONENT_CHECKMATE )
 		{
-			result += ( isInFavor ) ? 1000000 : -1000000;
+			result += ( isInFavor ) ? King.VALUE : -King.VALUE; //Register value of checkmate despite no capture
 		}
 		else
-		if (recurseLevel > 0 && (startTime > ( System.currentTimeMillis() - MS_TO_CALCULATE ) ) )
+		if( recurseLevel > 0 )
 		{
             originCell.getBoard().digSimulation();
             perform();
             ArrayList<Action> allActions = originCell.getBoard().getGame().getAllActions( originCell.getBoard().getGame().getTurnColor() );
+                    
+            double bestMove = ( isInFavor ) ? Integer.MAX_VALUE : Integer.MIN_VALUE;
             
-            int numberToEvaluate = (int) (allActions.size() * TOP_PERCENT_TO_EVALUATE);
-            
-            double bestMove = ( !isInFavor ) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
-            
-            for( int i = 0; i < numberToEvaluate; i++ )
+            for( Action testingAction : allActions )
             {
-            	Action testingAction = allActions.get( i );
             	double actionValue = testingAction.recurseForValue(recurseLevel -1, favor, startTime);
-            	if ( !isInFavor )
-            	{
-            		if ( actionValue > bestMove )
-            		{
-            			bestMove = actionValue;
-            		}
-            	}
-            	else
+            	if ( isInFavor )
             	{
             		if ( actionValue < bestMove )
             		{
             			bestMove = actionValue;
             		}
             	}
+            	else
+            	{
+            		if ( actionValue > bestMove )
+            		{
+            			bestMove = actionValue;
+            		}
+            	}
             }
             
-            result += bestMove*.999;
+            result += bestMove*(1-MEDIUM_BIAS); //Uncertainty and Impatience bias
             
             originCell.getBoard().rollBackSimulation();
         }

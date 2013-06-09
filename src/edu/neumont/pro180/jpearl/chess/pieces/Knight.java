@@ -9,9 +9,12 @@ import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveType;
 
 public class Knight extends Piece
 {
+	public static final char REPRESENTATION = 'n';
+	public static final int VALUE = 3;
+	
 	public Knight( PieceColor color )
 	{
-		super( color, 'n', 6 );
+		super( color, REPRESENTATION, VALUE );
 	}
 	
 	@Override

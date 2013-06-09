@@ -9,9 +9,12 @@ import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveType;
 
 public class Queen extends Piece
 {
+	public static final char REPRESENTATION = 'q';
+	public static final int VALUE = 9;
+	
 	public Queen( PieceColor color )
 	{
-		super( color, 'q', 18 );
+		super( color, REPRESENTATION, VALUE );
 	}
 	@Override
 	public MoveSet getMoveSet()

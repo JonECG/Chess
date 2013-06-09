@@ -51,6 +51,11 @@ public class Location
 		return new Location( x + move.getDeltaX(), y + move.getDeltaY() );
 	}
 	
+	public Location adjust( int deltaX, int deltaY )
+	{
+		return new Location( x + deltaX, y + deltaY );
+	}
+	
 	public boolean isInBoard()
 	{
 		return ( x >= 0 && x < ChessBoard.BOARD_SIZE && y >= 0 && y < ChessBoard.BOARD_SIZE );

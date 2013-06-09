@@ -13,7 +13,6 @@ import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveStyle;
 import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveType;
 import edu.neumont.pro180.jpearl.chess.view.CellPanel;
 
-
 public class Cell
 {
 	private ArrayList<Piece> pieceLevels;
@@ -21,6 +20,8 @@ public class Cell
 	private Location location;
 	private ChessBoard board;
 	private CellPanel viewEquivalent;
+
+	private static final int EN_PASSANT_RANK = 2;
 	
 	public enum TurnResult{ NO_MOVE_MADE, NORMAL_MOVE, SELF_CHECK, OPPONENT_CHECK, OPPONENT_CHECKMATE, STALEMATE };
 	
@@ -98,12 +99,13 @@ public class Cell
 			
 			if (isPossible)
 			{	
+				executeSpecialCases(potentialMove);
 				placePieceAt( toCell );
 				
 				if (board.getSimulationLevel() == 0)
 				{
 					char append = ( potentialMove.getType() == MoveType.CAPTURE ? '*' : ' ' );
-					System.out.println( String.format("%s %s%c", location.toString(), location.addMove( referenceMove ).toString(), append ) );
+					System.out.println( String.format("%s %s%c", location.toString(), location.addMove( potentialMove ).toString(), append ) );
 				}
 				
 				board.getGame().giveNextPlayerControl();
@@ -120,6 +122,7 @@ public class Cell
 		
 		board.digSimulation();
 		
+		executeSpecialCases( checkedMove );
 		placePieceAt( toCell );
 		
 		if ( board.getGame().isInCheck( board.getGame().getTurnColor().getDeclaredPlayer() ) )
@@ -158,7 +161,7 @@ public class Cell
 		Location adjustedLocation = location.addMove( potentialMove );
 		Cell toCell = board.getCell( adjustedLocation );
 		
-		if( evaluateSpecialCases( potentialMove, referenceMove ) )
+		if( evaluateSpecialCases( potentialMove, referenceMove, toCell ) )
 		{
 			if ( referenceMove.getStyle() != MoveStyle.SLIDE || isSlideUnblocked( potentialMove, referenceMove ) )
 			{
@@ -179,6 +182,11 @@ public class Cell
 						result = true;
 					}
 				}
+				
+				if( !result )
+				{
+					result = evaluateSpecialCases( potentialMove, referenceMove, toCell );
+				}
 			}
 		}
 		
@@ -186,7 +194,7 @@ public class Cell
 	}
 	
 	//Returns whether all of the special cases of a move are currently satisfied
-	private boolean evaluateSpecialCases( Move attempt, Move evaluating )
+	private boolean evaluateSpecialCases( Move attempt, Move evaluating, Cell toCell )
 	{
 		boolean result = true;
 		
@@ -199,8 +207,24 @@ public class Cell
 		}
 		if (evaluating.hasCase( MoveCase.IN_PASSING ) )
 		{
-			//NOT IMPLEMENTED YET
-			result = false;
+			boolean enPassantPossible = false;
+			if (toCell.getLocation().getY() == ChessBoard.BOARD_SIZE - EN_PASSANT_RANK - 1)
+			{
+				Cell shouldHave = board.getCell( toCell.getLocation().adjust( 0, -1 ) );
+				if( shouldHave.hasPiece() )
+				{
+					Piece testingPiece = shouldHave.getPiece();
+					if (testingPiece.getCharacterRepresentation() == Pawn.REPRESENTATION )
+					{
+						if( testingPiece.getLastTurn() == board.getGame().getMoveNumber() - 1 )
+						{
+							enPassantPossible = true;
+							System.out.println( "En passant was available at " + shouldHave.toString() );
+						}
+					}
+				}
+			}
+			result = enPassantPossible && result;
 		}
 		if (evaluating.hasCase( MoveCase.ONCE_PER_GAME ) )
 		{
@@ -225,6 +249,23 @@ public class Cell
 		}
 		
 		return result;
+	}
+	
+	private void executeSpecialCases( Move attempt )//, Move evaluating )
+	{
+		Cell toCell = board.getCell( location.addMove( attempt ) );
+		if (attempt.hasCase( MoveCase.IN_PASSING ) )
+		{
+			if (toCell.getLocation().getY() == ChessBoard.BOARD_SIZE - EN_PASSANT_RANK - 1)
+			{
+				Cell shouldHave = board.getCell( toCell.getLocation().adjust( 0, -1 ) );
+				toCell.givePiece( shouldHave.takePiece() );
+			}
+		}
+		if (attempt.hasCase( MoveCase.ONCE_PER_GAME ) )
+		{
+			//NOT IMPLEMENTED YET
+		}
 	}
 	
 	//Returns whether a slide movement path (eg: queen, bishop, rook) is unblocked by other pieces
@@ -302,7 +343,14 @@ public class Cell
 	{
 		Piece heldPiece = null;
 		
-		getPiece().move();
+		if (board.getSimulationLevel() == 0)
+		{
+			getPiece().move( board.getGame().getMoveNumber() );
+		}
+		else
+		{
+			getPiece().move();
+		}
 		if ( adjustedCell.hasPiece() )
 		{
 			heldPiece = adjustedCell.takePiece();

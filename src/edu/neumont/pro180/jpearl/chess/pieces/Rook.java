@@ -9,9 +9,12 @@ import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveType;
 
 public class Rook extends Piece
 {
+	public static final char REPRESENTATION = 'r';
+	public static final int VALUE = 3;
+	
 	public Rook( PieceColor color )
 	{
-		super( color, 'r', 10 );
+		super( color, REPRESENTATION, VALUE );
 	}
 	
 	@Override

@@ -10,9 +10,12 @@ import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveType;
 
 public class King extends Piece
 {
+	public static final char REPRESENTATION = 'k';
+	public static final int VALUE = 1000000;
+	
 	public King( PieceColor color )
 	{
-		super( color, 'k', 2000000 );
+		super( color, REPRESENTATION, VALUE );
 		color.getDeclaredPlayer().setVitalPiece( this );
 	}
 	

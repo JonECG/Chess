@@ -14,6 +14,7 @@ public abstract class Piece
 	private PieceColor color;
 	private BufferedImage image;
 	private int numberOfMoves;
+	private int lastTurn;
 	private char characterRepresentation;
 	private int unitWorth;
 	
@@ -22,6 +23,7 @@ public abstract class Piece
  		this.characterRepresentation = characterRepresentation;
  		this.unitWorth = unitWorth;
  		
+ 		lastTurn = 0;
  		numberOfMoves = 0;
 		this.color = color;
 		
@@ -87,6 +89,17 @@ public abstract class Piece
 	public void setNumberOfMoves( int numberOfMoves)
 	{
 		this.numberOfMoves = numberOfMoves;
+	}
+	
+	public int getLastTurn()
+	{
+		return lastTurn;
+	}
+	
+	public void move( int turnMoveMadeOn )
+	{
+		lastTurn = turnMoveMadeOn;
+		move();
 	}
 	
 	public void move()

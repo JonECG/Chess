@@ -10,9 +10,12 @@ import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveType;
 
 public class Pawn extends Piece
 {
+	public static final char REPRESENTATION = 'p';
+	public static final int VALUE = 1;
+	
 	public Pawn( PieceColor color )
 	{
-		super( color, 'p', 2 );
+		super( color, REPRESENTATION, VALUE );
 	}
 	
 	@Override

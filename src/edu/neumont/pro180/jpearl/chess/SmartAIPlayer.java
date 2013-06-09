@@ -12,24 +12,28 @@ import edu.neumont.pro180.jpearl.chess.pieces.PieceColor;
 
 public class SmartAIPlayer extends Player
 {
-	private Random rand;
+	private int numberOfRecursions;
+	private static final int MINIMUM_SEEKER_RECURSIONS = 3;
+	
+	public SmartAIPlayer( PieceColor commandingColor, ChessGame game, int numberOfRecursions )
+	{
+		super( commandingColor, game );
+		this.numberOfRecursions = numberOfRecursions;
+	}
 	
 	public SmartAIPlayer( PieceColor commandingColor, ChessGame game )
 	{
-		super( commandingColor, game );
-		
-		rand = new Random();
+		this( commandingColor, game, 0 );
 	}
-
 
 	@Override
 	public void takeTurn()
 	{
-		int numberOfRecursions = 2;
+		int turnRecursions = numberOfRecursions;
 		
-		if ( getGame().getChessBoard().getAllCellsWithPiece( getCommandingColor().getOpposing() ).size() <= 2 )
+		if ( getGame().getChessBoard().getAllCellsWithPiece( getCommandingColor().getOpposing() ).size() == 1)
 		{
-			numberOfRecursions = 3;
+			turnRecursions = Math.max( MINIMUM_SEEKER_RECURSIONS, turnRecursions );
 		}
 		
 		ArrayList<Action> allActions = getGame().getAllActions( getCommandingColor() );

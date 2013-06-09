@@ -20,9 +20,12 @@ public class ChessGame
 	private Player[] playerRoster;
 	private int playerTurnIndex;
 	private ChessBoard board;
+	private int turnNumber;
+	private static final int TURN_WAIT = 1000;
 	
 	public ChessGame( Player...players )
 	{
+		turnNumber = 1;
 		playerRoster = players;
 		playerTurnIndex = 0;
 		board = new ChessBoard( this );
@@ -30,11 +33,18 @@ public class ChessGame
 
 	public Player playGame()
 	{
-        while(!isInCheckMate(playerRoster[0]) && !isInCheckMate(playerRoster[1]))
-        {
-            System.out.println(getCurrentPlayerTurn().getCommandingColor());
-            getCurrentPlayerTurn().takeTurn();
-        }
+		do
+		{
+			try
+			{
+				Thread.sleep(TURN_WAIT);
+			}
+			catch ( InterruptedException e ){}
+			getCurrentPlayerTurn().takeTurn();
+			turnNumber++;
+		}
+        while(!isInCheckMate(getCurrentPlayerTurn()));
+		
         Player winner = isInCheckMate(playerRoster[0]) ? playerRoster[1] : playerRoster[0];
         System.out.println("winner: " + winner);
         return winner;
@@ -168,5 +178,11 @@ public class ChessGame
 		board.rollBackSimulation();
 		
 		return result;
+	}
+
+
+	public int getMoveNumber()
+	{
+		return turnNumber;
 	}
 }
