@@ -84,14 +84,14 @@ public abstract class Piece
 		return numberOfMoves;
 	}
 	
+	public void setNumberOfMoves( int numberOfMoves)
+	{
+		this.numberOfMoves = numberOfMoves;
+	}
+	
 	public void move()
 	{
 		numberOfMoves += 1;
-	}
-	
-	public void undoMove()
-	{
-		numberOfMoves -= 1;
 	}
 	
 	public String toString()

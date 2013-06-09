@@ -22,14 +22,16 @@ public class Action implements Comparable<Action>
 	private Cell originCell;
 	private Move move;
 	private Cell otherCell;
+	private TurnResult moveResult;
 	private static final int MS_TO_CALCULATE = 100000;
 	private static final double TOP_PERCENT_TO_EVALUATE = 1;
 	
-	public Action( Cell originCell, Move move, Cell otherCell )
+	public Action( Cell originCell, Move move, Cell otherCell, TurnResult moveResult )
 	{
 		this.originCell = originCell;
 		this.move = move;
 		this.otherCell = otherCell;
+		this.moveResult = moveResult;
 	}
 
 	
@@ -40,33 +42,45 @@ public class Action implements Comparable<Action>
 	
 	public double getValue()
 	{
-        double result = recurseForValue( 2, originCell.getBoard().getGame().getTurnColor(), System.currentTimeMillis() );
+        return getValue(3);
+	}
+	
+	public double getValue( int numberOfRecursions )
+	{
+        double result = recurseForValue( numberOfRecursions, originCell.getBoard().getGame().getTurnColor(), System.currentTimeMillis() );
 		return result;
 	}
 	
 	public double recurseForValue( int recurseLevel, PieceColor favor, long startTime )
 	{
-		int otherCellValue = otherCell.hasPiece() ? otherCell.getPiece().getUnitWorth() : 0;
-		double result = ( originCell.getBoard().getGame().getTurnColor() == favor ) ? otherCellValue : -otherCellValue;// - originCell.getPiece().getUnitWorth()/2;
+		boolean isInFavor = originCell.getBoard().getGame().getTurnColor() == favor;
 		
+		int otherCellValue = otherCell.hasPiece() ? otherCell.getPiece().getUnitWorth() : 0;
+		double result = ( isInFavor ) ? otherCellValue : -otherCellValue*1.02;
+		
+		double subTotal = move.getLength()*.0001 - originCell.getPiece().getNumberOfMoves()*.001;
+		result += ( isInFavor ) ? subTotal : -subTotal;
+		
+		if( moveResult == TurnResult.OPPONENT_CHECKMATE )
+		{
+			result += ( isInFavor ) ? 1000000 : -1000000;
+		}
+		else
 		if (recurseLevel > 0 && (startTime > ( System.currentTimeMillis() - MS_TO_CALCULATE ) ) )
 		{
             originCell.getBoard().digSimulation();
-            Piece pieceHold = originCell.getPiece();
             perform();
             ArrayList<Action> allActions = originCell.getBoard().getGame().getAllActions( originCell.getBoard().getGame().getTurnColor() );
             
-            //Collections.sort( allActions );
-//            int numberEvaluated = 0;
             int numberToEvaluate = (int) (allActions.size() * TOP_PERCENT_TO_EVALUATE);
             
-            double bestMove = ( originCell.getBoard().getGame().getTurnColor() == favor ) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+            double bestMove = ( !isInFavor ) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
             
             for( int i = 0; i < numberToEvaluate; i++ )
             {
             	Action testingAction = allActions.get( i );
             	double actionValue = testingAction.recurseForValue(recurseLevel -1, favor, startTime);
-            	if ( originCell.getBoard().getGame().getTurnColor() == favor )
+            	if ( !isInFavor )
             	{
             		if ( actionValue > bestMove )
             		{
@@ -82,20 +96,8 @@ public class Action implements Comparable<Action>
             	}
             }
             
-            result += bestMove;
+            result += bestMove*.999;
             
-//            double runningTotal = 0;
-//            for( Action action : allActions)
-//            {
-//            	if ( numberEvaluated < numberToEvaluate && startTime > ( System.currentTimeMillis() - MS_TO_CALCULATE ))
-//            	{
-//	                runningTotal += action.recurseForValue(recurseLevel -1, favor, startTime)*.99;
-//            	}
-//            	numberEvaluated++;
-//            }
-//            result += runningTotal / allActions.size();
-            
-            pieceHold.undoMove();
             originCell.getBoard().rollBackSimulation();
         }
 		

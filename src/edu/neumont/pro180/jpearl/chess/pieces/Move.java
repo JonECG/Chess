@@ -196,4 +196,10 @@ public class Move
 	{
 		return String.format( "Delta X: %s; Delta Y: %s; Style: %s", deltaX, deltaY, style );
 	}
+
+
+	public int getLength()
+	{
+		return Math.abs( deltaX ) + Math.abs( deltaY );
+	}
 }

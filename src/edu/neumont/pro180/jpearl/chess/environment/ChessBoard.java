@@ -122,6 +122,16 @@ public class ChessBoard
 			game.giveNextPlayerControl();
 		
 		simulationLayer -= 1;
+		
+		//Remove move count for pieces
+		for( int i = 0; i < BOARD_SIZE; i++ )
+		{
+			for( int j = 0; j < BOARD_SIZE; j++ )
+			{
+				Cell cell = getCell( new Location( i, j ) );
+				cell.returnFromSimulation();
+			}
+		}
 	}
 	
 	private void mirrorTurnForSimulation()

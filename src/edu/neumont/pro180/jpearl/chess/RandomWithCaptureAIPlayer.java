@@ -21,6 +21,7 @@ public class RandomWithCaptureAIPlayer extends Player
 	@Override
 	public void takeTurn()
 	{
+		
 		ArrayList<Action> allActions = getGame().getAllActions( getCommandingColor() );
 		
 		Collections.shuffle( allActions );
@@ -40,7 +41,7 @@ public class RandomWithCaptureAIPlayer extends Player
 
 		try
 		{
-			Thread.sleep(200);
+			Thread.sleep(1000);
 			bestAction.perform();
 			Thread.sleep(200);
 		}

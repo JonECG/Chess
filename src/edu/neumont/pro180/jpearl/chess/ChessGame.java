@@ -160,7 +160,7 @@ public class ChessGame
 
 				if (moveResult != TurnResult.SELF_CHECK && moveResult != TurnResult.STALEMATE)
 				{
-					result.add( new Action( cell, move, board.getCell( cell.getLocation().addMove( move ) ) ) );
+					result.add( new Action( cell, move, board.getCell( cell.getLocation().addMove( move ) ), moveResult ) );
 				}
 			}
 		}

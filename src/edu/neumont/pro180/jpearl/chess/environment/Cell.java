@@ -17,6 +17,7 @@ import edu.neumont.pro180.jpearl.chess.view.CellPanel;
 public class Cell
 {
 	private ArrayList<Piece> pieceLevels;
+	private ArrayList<Integer> movesBeforeSimulation;
 	private Location location;
 	private ChessBoard board;
 	private CellPanel viewEquivalent;
@@ -29,6 +30,8 @@ public class Cell
 		location = new Location( x, y );
 		pieceLevels = new ArrayList<Piece>();
 		pieceLevels.add( null );
+		movesBeforeSimulation = new ArrayList<Integer>();
+		movesBeforeSimulation.add( null );
 		this.board = board;
 	}
 	
@@ -118,7 +121,6 @@ public class Cell
 		board.digSimulation();
 		
 		placePieceAt( toCell );
-		toCell.getPiece().undoMove();
 		
 		if ( board.getGame().isInCheck( board.getGame().getTurnColor().getDeclaredPlayer() ) )
 		{
@@ -413,13 +415,22 @@ public class Cell
 		if ( pieceLevels.size() <= board.getSimulationLevel() )
 		{
 			pieceLevels.add( pieceLevels.get( pieceLevels.size() - 1 ) );
+			movesBeforeSimulation.add( ( hasPiece() ) ? getPiece().getNumberOfMoves() : null );
 		}
 		else
 		{
 			pieceLevels.set( board.getSimulationLevel(), pieceLevels.get( board.getSimulationLevel() - 1 ) );
+			movesBeforeSimulation.set( board.getSimulationLevel(), ( hasPiece() ) ? getPiece().getNumberOfMoves() : null );
 		}
 	}
 
+	public void returnFromSimulation()
+	{
+		if (hasPiece())
+		{
+			getPiece().setNumberOfMoves( movesBeforeSimulation.get( board.getSimulationLevel() + 1 ) );
+		}
+	}
 
 	public ChessBoard getBoard()
 	{
