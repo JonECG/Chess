@@ -46,7 +46,7 @@ public class Cell
 			if( getPiece().getColor() == board.getGame().getTurnColor() )
 			{
 				MoveSet potentialMoves = getPiece().getMoveSetByColor();
-				ArrayList<Move> applicableMoves = potentialMoves.matchMoves( suggestion );
+				ArrayList<Move> applicableMoves = potentialMoves.matchingMoves( suggestion );
 				if (applicableMoves.size() > 0)
 				{
 					Location adjustedLocation = location.addMove( suggestion );
@@ -73,7 +73,7 @@ public class Cell
 		boolean isPossible = isMovePossible( potentialMove, referenceMove );
 		if ( isPossible )
 		{
-			result = resultOfMove( potentialMove );
+			result = resultOfMove( potentialMove, referenceMove );
 			
 			switch( result )
 			{
@@ -99,7 +99,7 @@ public class Cell
 			
 			if (isPossible)
 			{	
-				executeSpecialCases(potentialMove);
+				executeSpecialCases( potentialMove, referenceMove );
 				placePieceAt( toCell );
 				
 				if (board.getSimulationLevel() == 0)
@@ -117,12 +117,18 @@ public class Cell
 
 	public TurnResult resultOfMove( Move checkedMove )
 	{
+		Move referenceMove = getPiece().getMoveSetByColor().matchingMove( checkedMove );
+		return resultOfMove( checkedMove, referenceMove );
+	}
+	
+	public TurnResult resultOfMove( Move checkedMove, Move referenceMove )
+	{
 		TurnResult result = TurnResult.NORMAL_MOVE;
 		Cell toCell = board.getCell( location.addMove( checkedMove ) );
 		
 		board.digSimulation();
 		
-		executeSpecialCases( checkedMove );
+		executeSpecialCases( checkedMove, referenceMove );
 		placePieceAt( toCell );
 		
 		if ( board.getGame().isInCheck( board.getGame().getTurnColor().getDeclaredPlayer() ) )
@@ -183,7 +189,7 @@ public class Cell
 					}
 				}
 				
-				if( !result )
+				if( !result && referenceMove.hasCases() )
 				{
 					result = evaluateSpecialCases( potentialMove, referenceMove, toCell );
 				}
@@ -208,18 +214,18 @@ public class Cell
 		if (evaluating.hasCase( MoveCase.IN_PASSING ) )
 		{
 			boolean enPassantPossible = false;
-			if (toCell.getLocation().getY() == ChessBoard.BOARD_SIZE - EN_PASSANT_RANK - 1)
+			int neededRank = getPiece().getColor() == PieceColor.LIGHT ? ChessBoard.BOARD_SIZE - EN_PASSANT_RANK - 1 : EN_PASSANT_RANK;
+			if (toCell.getLocation().getY() == neededRank )
 			{
-				Cell shouldHave = board.getCell( toCell.getLocation().adjust( 0, -1 ) );
+				Cell shouldHave = board.getCell( toCell.getLocation().adjust( 0, -getPiece().getColor().getVerticalDirection().getDeltaY() ) );
 				if( shouldHave.hasPiece() )
 				{
 					Piece testingPiece = shouldHave.getPiece();
 					if (testingPiece.getCharacterRepresentation() == Pawn.REPRESENTATION )
 					{
-						if( testingPiece.getLastTurn() == board.getGame().getMoveNumber() - 1 )
+						if( testingPiece.getLastTurn() == board.getGame().getMoveNumber() - 1 && testingPiece.getNumberOfMoves() == 1 )
 						{
 							enPassantPossible = true;
-							System.out.println( "En passant was available at " + shouldHave.toString() );
 						}
 					}
 				}
@@ -237,7 +243,7 @@ public class Cell
 			{
 				//Get the cell that is between the current location and the potential destination
 				Cell testCell = board.getCell( location.addMove( new Move( attempt.getDeltaX() / 2, attempt.getDeltaY() / 2, null, null ) ) );
-				if (testCell.getPiece() != null)
+				if (testCell.getPiece() != null || toCell.hasPiece())
 				{
 					result = false;
 				}
@@ -251,18 +257,20 @@ public class Cell
 		return result;
 	}
 	
-	private void executeSpecialCases( Move attempt )//, Move evaluating )
+	private void executeSpecialCases( Move attempt, Move reference )
 	{
 		Cell toCell = board.getCell( location.addMove( attempt ) );
-		if (attempt.hasCase( MoveCase.IN_PASSING ) )
+		if (reference.hasCase( MoveCase.IN_PASSING ) )
 		{
-			if (toCell.getLocation().getY() == ChessBoard.BOARD_SIZE - EN_PASSANT_RANK - 1)
+			int neededRank = getPiece().getColor() == PieceColor.LIGHT ? ChessBoard.BOARD_SIZE - EN_PASSANT_RANK - 1 : EN_PASSANT_RANK;
+			
+			if (toCell.getLocation().getY() == neededRank )
 			{
-				Cell shouldHave = board.getCell( toCell.getLocation().adjust( 0, -1 ) );
-				toCell.givePiece( shouldHave.takePiece() );
+				Cell shouldHave = board.getCell( toCell.getLocation().adjust( 0, -getPiece().getColor().getVerticalDirection().getDeltaY() ) );
+				shouldHave.takePiece();
 			}
 		}
-		if (attempt.hasCase( MoveCase.ONCE_PER_GAME ) )
+		if (reference.hasCase( MoveCase.ONCE_PER_GAME ) )
 		{
 			//NOT IMPLEMENTED YET
 		}

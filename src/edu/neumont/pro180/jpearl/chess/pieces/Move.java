@@ -202,4 +202,10 @@ public class Move
 	{
 		return Math.abs( deltaX ) + Math.abs( deltaY );
 	}
+
+
+	public boolean hasCases()
+	{
+		return cases.size() > 0;
+	}
 }

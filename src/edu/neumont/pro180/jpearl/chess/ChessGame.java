@@ -41,7 +41,6 @@ public class ChessGame
 			}
 			catch ( InterruptedException e ){}
 			getCurrentPlayerTurn().takeTurn();
-			turnNumber++;
 		}
         while(!isInCheckMate(getCurrentPlayerTurn()));
 		
@@ -139,6 +138,7 @@ public class ChessGame
 	public void giveNextPlayerControl()
 	{
 		playerTurnIndex = ( playerTurnIndex + 1 ) % playerRoster.length;
+		turnNumber++;
 	}
 
 

@@ -40,12 +40,12 @@ public class Driver
         Object selected = gameTypeOptionPane.getValue();
         System.out.println( selected );
         if(selected.equals( options[0]) ){
-        	game.addNewPlayer( new RandomWithCaptureAIPlayer( PieceColor.LIGHT, game ) );
+        	game.addNewPlayer( new HumanPlayer( PieceColor.LIGHT, game ) );
             game.addNewPlayer( new RandomWithCaptureAIPlayer( PieceColor.DARK, game ) );
         }
         if(selected.equals( options[1]) ){
-        	game.addNewPlayer( new SmartAIPlayer( PieceColor.LIGHT, game, 1 ) );
-            game.addNewPlayer( new RandomWithCaptureAIPlayer( PieceColor.DARK, game ) );
+        	game.addNewPlayer( new SmartAIPlayer( PieceColor.LIGHT, game, 2 ) );
+            game.addNewPlayer( new HumanPlayer( PieceColor.DARK, game ) );
         }
         if(selected.equals( options[2]) ){
             game.addNewPlayer( new HumanPlayer( PieceColor.LIGHT, game ) );

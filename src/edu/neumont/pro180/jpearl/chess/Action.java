@@ -20,6 +20,7 @@ import edu.neumont.pro180.jpearl.chess.pieces.Pawn;
 import edu.neumont.pro180.jpearl.chess.pieces.Piece;
 import edu.neumont.pro180.jpearl.chess.pieces.PieceColor;
 import edu.neumont.pro180.jpearl.chess.pieces.Queen;
+import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveCase;
 
 public class Action implements Comparable<Action>
 {
@@ -76,7 +77,14 @@ public class Action implements Comparable<Action>
 			{
 				subTotal += Queen.VALUE; //Add value to moves with pawn promotion
 			}
+			
+			if ( move.hasCase( MoveCase.IN_PASSING ) ) //Consider en passant a capture of a pawn
+			{
+				subTotal += Pawn.VALUE;
+			}
 		}
+		
+		
 		result += ( isInFavor ) ? subTotal : -subTotal;
 		
 		if( moveResult == TurnResult.OPPONENT_CHECKMATE )
@@ -123,7 +131,12 @@ public class Action implements Comparable<Action>
 
 	public int getImmediateValue()
 	{
-		return otherCell.hasPiece() ? otherCell.getPiece().getUnitWorth() : 0;
+		int enPassantValue = 0;
+
+		if ( move.hasCase( MoveCase.IN_PASSING ) ) //Consider en passant a capture of a pawn
+			enPassantValue = 1;
+			
+		return otherCell.hasPiece() ? otherCell.getPiece().getUnitWorth() : enPassantValue;
 	}
 
 

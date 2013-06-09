@@ -19,7 +19,7 @@ public class MoveSet
 
 
 	//Returns a list of moves in the moveset that match a given move
-	public ArrayList<Move> matchMoves( Move testMove )
+	public ArrayList<Move> matchingMoves( Move testMove )
 	{
 		ArrayList<Move> result = new ArrayList<Move>();
 		
@@ -30,7 +30,23 @@ public class MoveSet
 				result.add( move );
 			}
 		}
+		if (result.size() > 1)
+			System.out.println( result.size() );
+		return result;
+	}
+	
+	//Returns a list of moves in the moveset that match a given move
+	public Move matchingMove( Move testMove )
+	{
+		Move result = null;
 		
+		for( Move move : moves )
+		{
+			if ( result == null && testMove.equals( move ))
+			{
+				result = move;
+			}
+		}
 		return result;
 	}
 
