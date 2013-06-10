@@ -44,7 +44,7 @@ public class Driver
             game.addNewPlayer( new RandomWithCaptureAIPlayer( PieceColor.DARK, game ) );
         }
         if(selected.equals( options[1]) ){
-        	game.addNewPlayer( new SmartAIPlayer( PieceColor.LIGHT, game, 2 ) );
+            game.addNewPlayer( new SmartAIPlayer( PieceColor.LIGHT, game, 2 ) );
             game.addNewPlayer( new SmartAIPlayer( PieceColor.DARK, game, 2 ) );
         }
         if(selected.equals( options[2]) ){
@@ -52,24 +52,23 @@ public class Driver
             game.addNewPlayer( new HumanPlayer( PieceColor.DARK, game ) );
         }
         if(selected.equals( options[3] )){
-            Tournament tournament = new Tournament( game );
+            Tournament tournament = new Tournament( path, DEFAULT_SIZE, 5 );
         }
-		
-		
-		frame.add( new BoardPanel(frame, game.getChessBoard()) );
-		
-		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-		frame.pack();
-		
-		game.runParser( new ChessFileParser( path ) );
-		
-		
-		frame.repaint();
-		
-		frame.setVisible( true );
-		frame.setLocationRelativeTo( null );
-		
-		game.playGame();
+        if(!selected.equals( options[3] )){
+            frame.add( new BoardPanel(frame, game.getChessBoard()) );
+
+            frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+            frame.pack();
+
+            game.runParser( new ChessFileParser( path ) );
+
+            frame.repaint();
+
+            frame.setVisible( true );
+            frame.setLocationRelativeTo( null );
+
+            game.playGame();
+        }
 	}
 
 }
