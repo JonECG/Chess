@@ -11,67 +11,68 @@ public class Tournament {
 
     private String path;
     private int defaultSize;
-    Player [] winners;
+    private Player [] winners;
+    private JFrame frame;
 
-    public Tournament( String path, int defaultSize, int numOfGames ) {
+    public Tournament( JFrame frame, String path, int defaultSize, int numOfGames ) {
+        this.frame = frame;
         this.path = path;
         this.defaultSize = defaultSize;
         winners = new Player[numOfGames];
     }
 
     public void start(){
-        for(int i = 0; i < winners.length; i ++){
+        for( int i = 0; i < winners.length; i ++ ){
             Player winner = newGame();
             winners[i] = winner;
-            System.out.println("round winner: " + winner);
+            System.out.println( "round winner: " + winner );
         }
-        System.out.println("tournament winner: " + tournamentWinner());
+        System.out.println( "tournament winner: " + tournamentWinner() );
     }
 
     private PieceColor tournamentWinner(){
         PieceColor winner = null;
         int darkWins = 0, lightWins = 0;
-        for (Player winner1 : winners) {
-            if (winner1.getCommandingColor() == PieceColor.DARK)
+        for ( Player winner1 : winners ) {
+            if ( winner1.getCommandingColor() == PieceColor.DARK )
                 darkWins++;
             else
                 lightWins++;
         }
-        if(darkWins != lightWins)
-            winner = (darkWins > lightWins) ? PieceColor.DARK : PieceColor.LIGHT;
+        if( darkWins != lightWins )
+            winner = ( darkWins > lightWins ) ? PieceColor.DARK : PieceColor.LIGHT;
         return winner;
     }
 
     private Player newGame(){
-        JFrame frame = new JFrame( "Chess and things" );
 
-        Dimension preferred = new Dimension( defaultSize,defaultSize );
+        Dimension preferred = new Dimension( defaultSize, defaultSize );
         frame.setPreferredSize( preferred );
 
         ChessGame game = new ChessGame();
         game.addNewPlayer( new SmartAIPlayer( PieceColor.LIGHT, game, 2 ) );
         game.addNewPlayer( new RandomWithCaptureAIPlayer( PieceColor.DARK, game) );
 
-        frame.add( new BoardPanel(frame, game.getChessBoard()) );
+        BoardPanel boardPanel = new BoardPanel( frame, game.getChessBoard() );
+        frame.add(boardPanel);
 
         frame.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
         frame.pack();
 
         game.runParser( new ChessFileParser( path ) );
 
-        frame.repaint();
-
         frame.setVisible( true );
-        frame.setLocationRelativeTo( null );
+
+        frame.repaint();
 
         Player winner = game.playGame();
 
+        try { Thread.sleep(4000); }
+        catch ( InterruptedException ignored ) { }
+
+        frame.remove(boardPanel);
         frame.repaint();
 
-        try { Thread.sleep(4000); }
-        catch ( InterruptedException ignored) { }
-        frame.setVisible(false);
-        frame.dispose();
         return winner;
     }
 }

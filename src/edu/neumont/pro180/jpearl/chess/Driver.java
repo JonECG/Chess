@@ -16,6 +16,7 @@ public class Driver
 {
 	private static final String PATH = "res\\log.txt";
 	private static final int DEFAULT_SIZE = 720;
+    private static final int TOURNAMENT_LENGTH = 5;
 	
 	/**
 	 * @param args
@@ -52,7 +53,7 @@ public class Driver
             game.addNewPlayer( new HumanPlayer( PieceColor.DARK, game ) );
         }
         if(selected.equals( options[3] )){
-            Tournament tournament = new Tournament( path, DEFAULT_SIZE, 5 );
+            Tournament tournament = new Tournament( frame, path, DEFAULT_SIZE, TOURNAMENT_LENGTH );
             tournament.start();
         }
         if(!selected.equals( options[3] )){
