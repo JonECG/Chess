@@ -21,9 +21,23 @@ public class Tournament {
         for(int i = 0; i < numOfGames; i ++){
             Player winner = newGame();
             winners[i] = winner;
-            System.out.println("tourny winner: " + winner);
+            System.out.println("round winner: " + winner);
         }
-        System.out.println("all winners: " + Arrays.toString(winners));
+        System.out.println("tournament winner: " + tournamentWinner());
+    }
+
+    private PieceColor tournamentWinner(){
+        PieceColor winner = null;
+        int darkWins = 0, lightWins = 0;
+        for(int i = 0; i < winners.length; i++){
+            if(winners[i].getCommandingColor() == PieceColor.DARK)
+                darkWins++;
+            else
+                lightWins++;
+        }
+        if(darkWins != lightWins)
+            winner = (darkWins > lightWins) ? PieceColor.DARK : PieceColor.LIGHT;
+        return winner;
     }
 
     private Player newGame(){
