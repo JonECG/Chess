@@ -6,7 +6,6 @@ import edu.neumont.pro180.jpearl.chess.view.BoardPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 
 public class Tournament {
 
@@ -18,7 +17,10 @@ public class Tournament {
         this.path = path;
         this.defaultSize = defaultSize;
         winners = new Player[numOfGames];
-        for(int i = 0; i < numOfGames; i ++){
+    }
+
+    public void start(){
+        for(int i = 0; i < winners.length; i ++){
             Player winner = newGame();
             winners[i] = winner;
             System.out.println("round winner: " + winner);
@@ -29,8 +31,8 @@ public class Tournament {
     private PieceColor tournamentWinner(){
         PieceColor winner = null;
         int darkWins = 0, lightWins = 0;
-        for(int i = 0; i < winners.length; i++){
-            if(winners[i].getCommandingColor() == PieceColor.DARK)
+        for (Player winner1 : winners) {
+            if (winner1.getCommandingColor() == PieceColor.DARK)
                 darkWins++;
             else
                 lightWins++;
@@ -41,7 +43,6 @@ public class Tournament {
     }
 
     private Player newGame(){
-
         JFrame frame = new JFrame( "Chess and things" );
 
         Dimension preferred = new Dimension( defaultSize,defaultSize );
@@ -53,7 +54,7 @@ public class Tournament {
 
         frame.add( new BoardPanel(frame, game.getChessBoard()) );
 
-        frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+        frame.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
         frame.pack();
 
         game.runParser( new ChessFileParser( path ) );
@@ -68,7 +69,7 @@ public class Tournament {
         frame.repaint();
 
         try { Thread.sleep(4000); }
-        catch ( InterruptedException e ) { }
+        catch ( InterruptedException ignored) { }
         frame.setVisible(false);
         frame.dispose();
         return winner;

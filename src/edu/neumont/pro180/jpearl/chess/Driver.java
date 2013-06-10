@@ -53,6 +53,7 @@ public class Driver
         }
         if(selected.equals( options[3] )){
             Tournament tournament = new Tournament( path, DEFAULT_SIZE, 5 );
+            tournament.start();
         }
         if(!selected.equals( options[3] )){
             frame.add( new BoardPanel(frame, game.getChessBoard()) );
