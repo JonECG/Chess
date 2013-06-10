@@ -40,7 +40,7 @@ public class Driver
         Object selected = gameTypeOptionPane.getValue();
         System.out.println( selected );
         if(selected.equals( options[0]) ){
-        	game.addNewPlayer( new HumanPlayer( PieceColor.LIGHT, game ) );
+        	game.addNewPlayer( new RandomWithCaptureAIPlayer( PieceColor.LIGHT, game ) );
             game.addNewPlayer( new RandomWithCaptureAIPlayer( PieceColor.DARK, game ) );
         }
         if(selected.equals( options[1]) ){
