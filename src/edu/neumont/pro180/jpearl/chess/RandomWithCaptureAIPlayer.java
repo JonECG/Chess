@@ -54,4 +54,8 @@ public class RandomWithCaptureAIPlayer extends Player
 //		Action topAction = allActions.get( 0 );
 	}
 
+    public String toString(){
+        return "RandomWithCapture";
+    }
+
 }

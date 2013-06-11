@@ -180,6 +180,10 @@ public class ChessGame
 		return result;
 	}
 
+    public Player[] getPlayerRoster(){
+        return playerRoster;
+    }
+
 
 	public int getMoveNumber()
 	{

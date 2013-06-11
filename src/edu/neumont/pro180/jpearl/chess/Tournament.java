@@ -13,6 +13,7 @@ public class Tournament {
     private int defaultSize;
     private Player [] winners;
     private JFrame frame;
+    private ChessGame game;
 
     public Tournament( JFrame frame, String path, int defaultSize, int numOfGames ) {
         this.frame = frame;
@@ -22,12 +23,30 @@ public class Tournament {
     }
 
     public void start(){
+        String title = "Smart: 0, RandomWithCapture: 0";
+        frame.setTitle(title);
         for( int i = 0; i < winners.length; i ++ ){
             Player winner = newGame();
             winners[i] = winner;
-            System.out.println( "round winner: " + winner );
+            frame.setTitle(getTitle());
+            frame.repaint();
         }
         System.out.println( "tournament winner: " + tournamentWinner() );
+    }
+
+    private String getTitle(){
+        int p1wins = 0, p2wins = 0;
+        String p1 = game.getPlayerRoster()[0].toString();
+        String p2 = game.getPlayerRoster()[1].toString();
+        for(int i = 0; i < winners.length; i++){
+            if(winners[i] != null && winners[i].toString().equals(p1))
+                p1wins++;
+            else if(winners[i] != null)
+                p2wins++;
+        }
+        String p1txt = p1 + ": " + p1wins;
+        String p2txt = p2 + ": " + p2wins;
+        return p1txt + ", " + p2txt;
     }
 
     private PieceColor tournamentWinner(){
@@ -49,7 +68,7 @@ public class Tournament {
         Dimension preferred = new Dimension( defaultSize, defaultSize );
         frame.setPreferredSize( preferred );
 
-        ChessGame game = new ChessGame();
+        game = new ChessGame();
         game.addNewPlayer( new SmartAIPlayer( PieceColor.LIGHT, game, 2 ) );
         game.addNewPlayer( new RandomWithCaptureAIPlayer( PieceColor.DARK, game) );
 

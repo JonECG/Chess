@@ -51,7 +51,10 @@ public class SmartAIPlayer extends Player
 		}
 		bestAction.perform();
 		//bestAction.printPieceMoves();
-
 	}
+
+    public String toString(){
+        return "Smart";
+    }
 
 }
