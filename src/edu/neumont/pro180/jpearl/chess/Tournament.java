@@ -14,13 +14,11 @@ public class Tournament {
     private Player [] winners;
     private JFrame frame;
     private ChessGame game;
-    private int numOfGames;
 
     public Tournament( JFrame frame, String path, int defaultSize, int numOfGames ) {
         this.frame = frame;
         this.path = path;
         this.defaultSize = defaultSize;
-        this.numOfGames = numOfGames;
         winners = new Player[numOfGames];
     }
 
@@ -46,7 +44,7 @@ public class Tournament {
                 p2wins++;
         }
         String title = "";
-        if(p1wins + p2wins != numOfGames)
+        if(p1wins == 3 || p1wins == 3)
             title = p1 + ": " + p1wins + ", " + p2 + ": " + p2wins;
         else {
             String winner = (p1wins > p2wins) ? p1 : p2;
