@@ -46,7 +46,7 @@ public class Tournament {
                 p2wins++;
         }
         String title;
-        if(p1wins == ( numOfGames / 2 ) + 1 || p1wins == ( numOfGames / 2 ) + 1 )
+        if(p1wins < ( numOfGames / 2 ) + 1 && p1wins < ( numOfGames / 2 ) + 1 )
             title = p1 + ": " + p1wins + ", " + p2 + ": " + p2wins;
         else {
             String winner = ( p1wins > p2wins ) ? p1 : p2;
