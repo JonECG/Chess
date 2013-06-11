@@ -46,7 +46,7 @@ public class Driver
         }
         if(selected.equals( options[1]) ){
             game.addNewPlayer( new HumanPlayer( PieceColor.LIGHT, game ) );
-            game.addNewPlayer( new SmartAIPlayer( PieceColor.DARK, game, 2 ) );
+            game.addNewPlayer( new SmartAIPlayer( PieceColor.DARK, game, 2 ) ); //TODO: Change 2 to the desired recursion level
         }
         if(selected.equals( options[2]) ){
             game.addNewPlayer( new HumanPlayer( PieceColor.LIGHT, game ) );
@@ -57,7 +57,8 @@ public class Driver
             tournament.start();
         }
         if(!selected.equals( options[3] )){
-            frame.add( new BoardPanel(frame, game.getChessBoard()) );
+        	BoardPanel boardView = new BoardPanel(frame, game.getChessBoard());
+            frame.add( boardView );
 
             frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
             frame.pack();
@@ -69,6 +70,7 @@ public class Driver
             frame.setVisible( true );
             frame.setLocationRelativeTo( null );
 
+            game.designateBoardPanel( boardView );
             game.playGame();
         }
 	}

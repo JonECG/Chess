@@ -13,11 +13,13 @@ public abstract class Player
 	private PieceColor commandingColor;
 	private Piece vitalPiece;
 	private ChessGame game;
+	private boolean isInteractive;
 	
-	public Player( PieceColor commandingColor, ChessGame game )
+	public Player( PieceColor commandingColor, ChessGame game, boolean isInteractive )
 	{
 		this.game = game;
 		this.commandingColor = commandingColor;
+		this.isInteractive = isInteractive;
 		commandingColor.setDeclaredPlayer( this );
 	}
 	
@@ -41,5 +43,10 @@ public abstract class Player
 	protected ChessGame getGame()
 	{
 		return game;
+	}
+
+	public boolean isGuiInteractive()
+	{
+		return isInteractive;
 	}
 }

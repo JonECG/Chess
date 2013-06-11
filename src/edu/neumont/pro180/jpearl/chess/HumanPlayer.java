@@ -11,7 +11,7 @@ public class HumanPlayer extends Player
 
 	public HumanPlayer( PieceColor commandingColor, ChessGame game )
 	{
-		super( commandingColor, game );
+		super( commandingColor, game, true );
 	}
 
 

@@ -14,6 +14,7 @@ import edu.neumont.pro180.jpearl.chess.io.ChessParser;
 import edu.neumont.pro180.jpearl.chess.pieces.Move;
 import edu.neumont.pro180.jpearl.chess.pieces.Move.MoveType;
 import edu.neumont.pro180.jpearl.chess.pieces.PieceColor;
+import edu.neumont.pro180.jpearl.chess.view.BoardPanel;
 
 public class ChessGame
 {
@@ -21,12 +22,13 @@ public class ChessGame
 	private int playerTurnIndex;
 	private ChessBoard board;
 	private int turnNumber;
-	private static final int TURN_WAIT = 100;
+	private static final int TURN_WAIT = 1000;
+	private BoardPanel boardView;
 	
-	public ChessGame( Player...players )
+	public ChessGame()
 	{
 		turnNumber = 1;
-		playerRoster = players;
+		playerRoster = new Player[0];
 		playerTurnIndex = 0;
 		board = new ChessBoard( this );
 	}
@@ -41,6 +43,8 @@ public class ChessGame
 			}
 			catch ( InterruptedException e ){}
 			getCurrentPlayerTurn().takeTurn();
+			if (boardView != null)
+				boardView.updateBorder();
 		}
         while(!isInCheckMate(getCurrentPlayerTurn()));
 		
@@ -141,7 +145,11 @@ public class ChessGame
 		turnNumber++;
 	}
 
-
+	public void designateBoardPanel( BoardPanel boardView )
+	{
+		this.boardView = boardView;
+	}
+	
 	public void addNewPlayer( Player player )
 	{
 		Player[] newPlayerRoster = new Player[playerRoster.length + 1];

@@ -25,6 +25,7 @@ public class CellClickListener extends MouseAdapter
 	@Override
 	public void mousePressed( MouseEvent e )
 	{
+		if ( cell.getBoard().getGame().getCurrentPlayerTurn().isGuiInteractive() )
 		board.processClick( cell );
 	}
 

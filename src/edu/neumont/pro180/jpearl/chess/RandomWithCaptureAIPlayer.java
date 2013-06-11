@@ -14,7 +14,7 @@ public class RandomWithCaptureAIPlayer extends Player
 {
 	public RandomWithCaptureAIPlayer( PieceColor commandingColor, ChessGame game )
 	{
-		super( commandingColor, game );
+		super( commandingColor, game, false );
 	}
 
 
@@ -39,17 +39,8 @@ public class RandomWithCaptureAIPlayer extends Player
 			}
 		}
 
-		try
-		{
-			Thread.sleep(1000);
-			bestAction.perform();
-			Thread.sleep(200);
-		}
-		catch ( InterruptedException e )
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		bestAction.perform();
+
 //		Collections.sort( allActions );
 //		Action topAction = allActions.get( 0 );
 	}

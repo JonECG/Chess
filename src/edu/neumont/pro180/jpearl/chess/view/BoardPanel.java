@@ -130,10 +130,9 @@ public class BoardPanel extends JPanel
 		updateBorder();
 	}
 
-	private void updateBorder()
+	public void updateBorder()
 	{
 		setBorder(BorderFactory.createMatteBorder( BORDER_SIZE, BORDER_SIZE, BORDER_SIZE, BORDER_SIZE, board.getGame().getCurrentPlayerTurn().getCommandingColor().getPlayerTurnColor()));
-
 	}
 	
 	private void highlightMoves( Location location, ArrayList<Move> moves )

@@ -76,6 +76,7 @@ public class Tournament {
 
         frame.repaint();
 
+        game.designateBoardPanel( boardPanel );
         Player winner = game.playGame();
 
         try { Thread.sleep( 4000 ); }

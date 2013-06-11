@@ -17,7 +17,7 @@ public class SmartAIPlayer extends Player
 	
 	public SmartAIPlayer( PieceColor commandingColor, ChessGame game, int numberOfRecursions )
 	{
-		super( commandingColor, game );
+		super( commandingColor, game, false );
 		this.numberOfRecursions = numberOfRecursions;
 	}
 	

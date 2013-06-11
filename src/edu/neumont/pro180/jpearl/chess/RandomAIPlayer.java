@@ -16,7 +16,7 @@ public class RandomAIPlayer extends Player
 	
 	public RandomAIPlayer( PieceColor commandingColor, ChessGame game )
 	{
-		super( commandingColor, game );
+		super( commandingColor, game, false );
 		
 		rand = new Random();
 	}
