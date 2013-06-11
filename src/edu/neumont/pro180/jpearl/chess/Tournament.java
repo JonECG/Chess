@@ -27,11 +27,16 @@ public class Tournament {
     public void start(){
         String title = "Smart: 0, RandomWithCapture: 0";
         frame.setTitle( title );
-        for( int i = 0; i < winners.length; i ++ ){
+        boolean game = true;
+        int i = 0 ;
+        while(game){
             Player winner = newGame();
             winners[i] = winner;
             frame.setTitle( getTitle() );
             frame.repaint();
+            if( getTitle().contains("won") )
+                game = false;
+            i++;
         }
     }
 
