@@ -66,7 +66,8 @@ public class Tournament {
         frame.setPreferredSize( preferred );
 
         game = new ChessGame();
-        game.addNewPlayer( new SmartAIPlayer( PieceColor.LIGHT, game, 2 ) );
+        game.addNewPlayer( new SmartAIPlayer( PieceColor.LIGHT, game, 1 ) );
+        //game.addNewPlayer( new RandomAIPlayer( PieceColor.LIGHT, game ) );
         game.addNewPlayer( new RandomWithCaptureAIPlayer( PieceColor.DARK, game) );
 
         BoardPanel boardPanel = new BoardPanel( frame, game.getChessBoard() );

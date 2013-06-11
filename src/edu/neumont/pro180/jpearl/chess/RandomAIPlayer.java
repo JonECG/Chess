@@ -28,17 +28,9 @@ public class RandomAIPlayer extends Player
 		ArrayList<Action> allActions = getGame().getAllActions( getCommandingColor() );
 		Action actionToTake = allActions.get( rand.nextInt( allActions.size() ) );
 
-		try
-		{
-			Thread.sleep(1000);
-			actionToTake.perform();
-			Thread.sleep(1000);
-		}
-		catch ( InterruptedException e )
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		actionToTake.perform();
+
 //		Collections.sort( allActions );
 //		Action topAction = allActions.get( 0 );
 	}
