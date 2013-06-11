@@ -14,11 +14,13 @@ public class Tournament {
     private Player [] winners;
     private JFrame frame;
     private ChessGame game;
+    private int numOfGames;
 
     public Tournament( JFrame frame, String path, int defaultSize, int numOfGames ) {
         this.frame = frame;
         this.path = path;
         this.defaultSize = defaultSize;
+        this.numOfGames = numOfGames;
         winners = new Player[numOfGames];
     }
 
@@ -31,7 +33,6 @@ public class Tournament {
             frame.setTitle(getTitle());
             frame.repaint();
         }
-        System.out.println( "tournament winner: " + tournamentWinner() );
     }
 
     private String getTitle(){
@@ -44,9 +45,14 @@ public class Tournament {
             else if(winners[i] != null)
                 p2wins++;
         }
-        String p1txt = p1 + ": " + p1wins;
-        String p2txt = p2 + ": " + p2wins;
-        return p1txt + ", " + p2txt;
+        String title = "";
+        if(p1wins + p2wins != numOfGames)
+            title = p1 + ": " + p1wins + ", " + p2 + ": " + p2wins;
+        else {
+            String winner = (p1wins > p2wins) ? p1 : p2;
+            title = winner + " won the Tournament!";
+        }
+        return title;
     }
 
     private PieceColor tournamentWinner(){
