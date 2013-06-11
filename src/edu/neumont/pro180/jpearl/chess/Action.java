@@ -64,7 +64,7 @@ public class Action implements Comparable<Action>
 		boolean isInFavor = originCell.getBoard().getGame().getTurnColor() == favor;
 		
 		double otherCellValue = otherCell.hasPiece() ? otherCell.getPiece().getUnitWorth() : 0;
-		double result = ( isInFavor ) ? otherCellValue : -otherCellValue*(1+LARGE_BIAS);
+		double result = ( isInFavor ) ? otherCellValue*(1+LARGE_BIAS) : -otherCellValue;
 		
 		//Add Bias for moves with larger board cover and pieces that have not been used as often
 		double subTotal = move.getLength()*SMALL_BIAS - originCell.getPiece().getNumberOfMoves()*LARGE_BIAS;

@@ -21,7 +21,7 @@ public class ChessGame
 	private int playerTurnIndex;
 	private ChessBoard board;
 	private int turnNumber;
-	private static final int TURN_WAIT = 1000;
+	private static final int TURN_WAIT = 100;
 	
 	public ChessGame( Player...players )
 	{

@@ -45,7 +45,7 @@ public class Driver
             game.addNewPlayer( new RandomWithCaptureAIPlayer( PieceColor.DARK, game ) );
         }
         if(selected.equals( options[1]) ){
-            game.addNewPlayer( new SmartAIPlayer( PieceColor.LIGHT, game, 2 ) );
+            game.addNewPlayer( new HumanPlayer( PieceColor.LIGHT, game ) );
             game.addNewPlayer( new SmartAIPlayer( PieceColor.DARK, game, 2 ) );
         }
         if(selected.equals( options[2]) ){
